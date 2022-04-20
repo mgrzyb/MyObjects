@@ -1,7 +1,7 @@
 using NHibernate.Cfg;
 using NHibernate.Mapping.ByCode;
 
-namespace MyObjects
+namespace MyObjects.NHibernate
 {
     public interface IPersistenceStrategy
     {

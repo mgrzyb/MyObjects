@@ -3,7 +3,7 @@ using System.Xml;
 using System.Xml.Serialization;
 using NHibernate.Cfg.MappingSchema;
 
-namespace MyObjects
+namespace MyObjects.NHibernate
 {
     public static class HbmMappingExtensions
     {

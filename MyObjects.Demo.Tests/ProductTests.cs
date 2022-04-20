@@ -9,10 +9,11 @@ namespace MyObjects.Demo.UnitTests
         [Test]
         public async Task CanCreateProduct()
         {
-            var productRef = await When(session => session.Save(new Product
-            {
-                Name = "My first product"
-            }));
+            var productRef = await When(session => session.Save(
+                new Product
+                {
+                    Name = "My first product"
+                }));
 
             await Then(async session =>
             {

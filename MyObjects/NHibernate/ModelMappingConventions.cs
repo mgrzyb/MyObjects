@@ -4,7 +4,7 @@ using System.Linq;
 using System.Reflection;
 using NHibernate.Mapping.ByCode;
 
-namespace MyObjects
+namespace MyObjects.NHibernate
 {
     class ModelMappingConventions
     {

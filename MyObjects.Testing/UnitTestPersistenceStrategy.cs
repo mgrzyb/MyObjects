@@ -1,5 +1,6 @@
 using System;
 using Microsoft.Data.Sqlite;
+using MyObjects.NHibernate;
 using NHibernate.Cfg;
 using NHibernate.Dialect;
 using NHibernate.Driver;

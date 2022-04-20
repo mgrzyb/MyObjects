@@ -1,14 +1,15 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using MyObjects.NHibernate;
 
 namespace MyObjects
 {
-    public class EventEmittingSession : ISession
+    public class EventEmittingSession<TAdvanced> : ISession<TAdvanced>
     {
-        private readonly ISession session;
+        private readonly ISession<TAdvanced> session;
 
-        public EventEmittingSession(ISession session)
+        public EventEmittingSession(ISession<TAdvanced> session)
         {
             this.session = session;
         }
@@ -38,7 +39,7 @@ namespace MyObjects
             this.session.Clear();
         }
 
-        public NHibernate.ISession Advanced => this.session.Advanced;
+        public TAdvanced Advanced => this.session.Advanced;
 
         public Task<Reference<T>> Save<T>(T entity) where T : AggregateRoot
         {

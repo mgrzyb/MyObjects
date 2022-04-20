@@ -1,12 +1,13 @@
 ﻿using MediatR;
+using MyObjects.NHibernate;
 
 namespace MyObjects
 {
-    public interface ICommandHandler<TCommand, TResult> : IHandler<TCommand, TResult> where TCommand : IRequest<TResult> 
+    public interface ICommandHandler<in TCommand, TResult> : IHandler<TCommand, TResult> where TCommand : IRequest<TResult> 
     {
     }
 
-    public interface ICommandHandler<TCommand> : ICommandHandler<TCommand, Unit> where TCommand : IRequest<Unit>
+    public interface ICommandHandler<in TCommand> : ICommandHandler<TCommand, Unit> where TCommand : IRequest<Unit>
     {
     }
 

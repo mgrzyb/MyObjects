@@ -4,15 +4,15 @@ using NHibernate.Engine;
 using NHibernate.SqlTypes;
 using NHibernate.UserTypes;
 
-namespace MyObjects
+namespace MyObjects.NHibernate
 {
     public abstract class UserType<T> : IUserType
     {
-        public T Instance => default(T);
+        public T? Instance => default(T);
         
         public Type ReturnedType => typeof(T);
         
-        public abstract bool Equals(object x, object y);
+        public new abstract bool Equals(object? x, object? y);
         public abstract int GetHashCode(object x);
         public abstract object NullSafeGet(DbDataReader rs, string[] names, ISessionImplementor session, object owner);
         public abstract void NullSafeSet(DbCommand cmd, object value, int index, ISessionImplementor session);

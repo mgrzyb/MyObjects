@@ -6,9 +6,9 @@ using NHibernate.SqlTypes;
 
 namespace MyObjects.Testing
 {
-    public class SqliteDateTimeOffsetType : NHibernate.UserTypes.IUserType
+    public class SqliteDateTimeOffsetType : global::NHibernate.UserTypes.IUserType
     {
-        bool NHibernate.UserTypes.IUserType.Equals(object x, object y)
+        bool global::NHibernate.UserTypes.IUserType.Equals(object x, object y)
         {
             return object.Equals(x, y);
         }

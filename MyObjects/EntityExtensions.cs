@@ -15,7 +15,7 @@ namespace MyObjects
         public static IEnumerable<Reference<T>> AsReferences<T>(this IEnumerable<T> entities) 
             where T : IEntity
         {
-            return entities.Select(e => GetReference(e));
+            return entities.Select(GetReference);
         }
 
         public static Task<List<Reference<TEntity>>> ToReferenceListAsync<TEntity>(this IQueryable<TEntity> entities)

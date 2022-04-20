@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using MyObjects.NHibernate;
 
 namespace MyObjects
 {
@@ -8,16 +9,17 @@ namespace MyObjects
     {
         Task<T> Resolve<T>(Reference<T> entityRef) where T : IEntity;
         Task<IReadOnlyList<T>> ResolveMany<T>(IEnumerable<Reference<T>> entityRefs) where T : IEntity;
-        
         Task<T> TryResolve<T>(Reference<T> entityRef) where T : IEntity;
         IQueryable<T> Query<T>();
-
         void Clear();
-        
-        NHibernate.ISession Advanced { get; }
+    }
+
+    public interface IReadonlySession<TAdvanced> : IReadonlySession
+    {
+        TAdvanced Advanced { get; }
     }
     
-    public interface ISession : IReadonlySession
+    public interface ISession<TAdvanced> : IReadonlySession<TAdvanced>
     {
         Task<Reference<T>> Save<T>(T entity) where T : AggregateRoot;
         Task Delete<T>(T entity) where T : AggregateRoot;

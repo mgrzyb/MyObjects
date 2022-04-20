@@ -2,7 +2,7 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
-namespace MyObjects
+namespace MyObjects.AspNetCore.Mvc
 {
     public interface IApiRequest : IApiRequest<Unit>
     {

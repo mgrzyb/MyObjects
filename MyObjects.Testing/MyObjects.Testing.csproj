@@ -1,15 +1,16 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>netstandard2.1</TargetFramework>
+        <TargetFramework>net6.0</TargetFramework>
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="Autofac" Version="5.1.2" />
-      <PackageReference Include="Microsoft.Data.Sqlite" Version="3.1.2" />
-      <PackageReference Include="NHibernate" Version="5.2.7" />
-      <PackageReference Include="NUnit" Version="3.12.0" />
-      <PackageReference Include="System.Data.SQLite.Core" Version="1.0.112" />
+      <PackageReference Include="Autofac" Version="6.3.0" />
+      <PackageReference Include="Autofac.Extras.AggregateService" Version="6.1.2" />
+      <PackageReference Include="Microsoft.Data.Sqlite" Version="6.0.3" />
+      <PackageReference Include="NHibernate" Version="5.3.11" />
+      <PackageReference Include="NUnit" Version="3.13.3" />
+      <PackageReference Include="System.Data.SQLite.Core" Version="1.0.115.5" />
     </ItemGroup>
 
     <ItemGroup>

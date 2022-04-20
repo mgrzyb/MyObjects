@@ -6,7 +6,7 @@ using NHibernate.Cfg;
 using NHibernate.Cfg.MappingSchema;
 using NHibernate.Mapping.ByCode;
 
-namespace MyObjects
+namespace MyObjects.NHibernate
 {
     public class NHibernateConfigurationBuilder
     {
@@ -22,7 +22,12 @@ namespace MyObjects
 
         public NHibernateConfigurationBuilder AddEntitiesFromAssemblyOf<T>()
         {
-            this.modelAssemblies.Add(typeof(T).Assembly);
+            return AddEntitiesFromAssembly(typeof(T).Assembly);
+        }
+
+        public NHibernateConfigurationBuilder AddEntitiesFromAssembly(Assembly assembly)
+        {
+            this.modelAssemblies.Add(assembly);
             return this;
         }
 

@@ -1,6 +1,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using MyObjects.Demo.Model.Orders;
+using MyObjects.Demo.Model.Orders.Commands;
 using MyObjects.Demo.Model.Products;
 using NHibernate.Linq;
 using NUnit.Framework;
@@ -24,7 +25,7 @@ namespace MyObjects.Demo.UnitTests
                 var productA = await session.Resolve(aRef);
                 var productB = await session.Resolve(bRef);
                 
-                var salesOrder = new SalesOrder();
+                var salesOrder = new SalesOrder("123");
                 salesOrder.AddLine(productA, 5);
                 salesOrder.AddLine(productB, 3, 3);
                 
@@ -44,6 +45,17 @@ namespace MyObjects.Demo.UnitTests
                 
                 Assert.That(orders.Count, Is.EqualTo(1));
             });
+        }
+
+        [Test]
+        public async Task Given_SalesOrder_Cancel_Emits_DomainEvent()
+        {
+            var orderRef = await Given(async session => await session.Save(new SalesOrder("123")));
+
+            await When(new CancelSalesOrder(orderRef));
+            
+            Assert.That(this.DomainEvents, Is.Not.Empty);
+            Assert.That(this.DomainEvents.Single(), Is.InstanceOf<SalesOrderCanceled>());
         }
     }
 }

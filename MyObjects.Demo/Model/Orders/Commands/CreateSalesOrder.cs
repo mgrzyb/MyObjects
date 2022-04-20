@@ -16,13 +16,16 @@ namespace MyObjects.Demo.Model.Orders.Commands
 
         public class Handler : Handler<CreateSalesOrder>
         {
-            public Handler(IDependencies dependencies) : base(dependencies)
+            private readonly INumberSequence orderNumberSequence;
+            
+            public Handler(IDependencies dependencies, INumberSequence orderNumberSequence) : base(dependencies)
             {
+                this.orderNumberSequence = orderNumberSequence;
             }
 
             public override async Task<Reference<SalesOrder>> Handle(CreateSalesOrder command, CancellationToken cancellationToken)
             {
-                var order = new SalesOrder();
+                var order = new SalesOrder(this.orderNumberSequence.Next().ToString());
                 
                 foreach (var l in command.Lines)
                 {

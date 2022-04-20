@@ -10,7 +10,7 @@ namespace MyObjects
     
     public abstract class Entity : IEntity
     {
-        private readonly int id;
+        private readonly int id = -1;
         public virtual int Id => this.id;
 
         public virtual int Version { get; protected set; }
@@ -79,7 +79,7 @@ namespace MyObjects
             return Equals(left, right);
         }
 
-        public static bool operator !=(Entity left, object right)
+        public static bool operator !=(Entity? left, object? right)
         {
             return !Equals(left, right);
         }

@@ -2,6 +2,6 @@ namespace MyObjects.Demo.Model.Products
 {
     public class Product : AggregateRoot
     {
-        public virtual string Name { get; set; }
+        public virtual string Name { get; protected internal set; }
     }
 }

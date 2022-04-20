@@ -1,7 +1,9 @@
 ﻿#nullable enable
 using System;
 using System.Threading.Tasks;
+using MyObjects.NHibernate;
 using NHibernate;
+using ISession = MyObjects.NHibernate.ISession;
 
 
 namespace MyObjects.Testing
@@ -11,7 +13,7 @@ namespace MyObjects.Testing
         private ISessionFactory sessionFactory;
         private IInterceptor? interceptor;
 
-        protected Dummy Dummy { get; private set; }
+        protected Dummy Dummy { get; set; }
 
         public TestFixtureBase(Action<NHibernateConfigurationBuilder>? options = null)
         {
@@ -36,7 +38,7 @@ namespace MyObjects.Testing
             try
             {
                 await given(nHibernateSession);
-                transaction.Commit();
+                await transaction.CommitAsync();
             }
             finally
             {
@@ -53,7 +55,7 @@ namespace MyObjects.Testing
             try
             {
                 var result = await given(nHibernateSession);
-                transaction.Commit();
+                await transaction.CommitAsync();
                 return result;
             }
             finally
@@ -71,7 +73,7 @@ namespace MyObjects.Testing
             try
             {
                 var result = await given(nHibernateSession, this.Dummy);
-                transaction.Commit();
+                await transaction.CommitAsync();
                 return result;
             }
             finally
@@ -94,7 +96,7 @@ namespace MyObjects.Testing
             {
                 this.Dummy = null;
             }
-            transaction.Commit();
+            await transaction.CommitAsync();
         }
 
         protected async Task<T> When<T>(Func<ISession, Task<T>> given)
@@ -106,7 +108,7 @@ namespace MyObjects.Testing
             try
             {
                 var result = await given(nHibernateSession);
-                transaction.Commit();
+                await transaction.CommitAsync();
                 return result;
             }
             finally
@@ -130,7 +132,7 @@ namespace MyObjects.Testing
             }
         }
 
-        private NHibernate.ISession OpenSession()
+        protected global::NHibernate.ISession OpenSession()
         {
             if (this.interceptor != null)
             {

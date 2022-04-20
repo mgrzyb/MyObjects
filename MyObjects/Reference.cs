@@ -21,7 +21,7 @@ namespace MyObjects
         
         public Type EntityType => typeof(TEntity);
 
-        private readonly TEntity entity;
+        private readonly TEntity? entity;
 
         // To make ToReference() working
         protected Reference()
@@ -52,7 +52,7 @@ namespace MyObjects
             return $"[{EntityType.Name}:{this.Id}]";
         }
 
-        public static bool operator ==(Reference<TEntity> ref1, Reference<TEntity> ref2)
+        public static bool operator ==(Reference<TEntity>? ref1, Reference<TEntity>? ref2)
         {
             if (ReferenceEquals(ref1, ref2)) return true;
             if (ReferenceEquals(ref1, null)) return false;
@@ -60,19 +60,19 @@ namespace MyObjects
             return ref1.Id == ref2.Id;
         }
 
-        public static bool operator !=(Reference<TEntity> ref1, Reference<TEntity> ref2)
+        public static bool operator !=(Reference<TEntity>? ref1, Reference<TEntity>? ref2)
         {
             return !(ref1 == ref2);
         }
 
-        public bool Equals(Reference<TEntity> other)
+        public bool Equals(Reference<TEntity>? other)
         {
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;
             return this.Id == other.Id;
         }
 
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;

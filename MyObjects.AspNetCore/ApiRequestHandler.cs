@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
 using Microsoft.AspNetCore.Mvc.Filters;
 using NHibernate;
+using ISession = MyObjects.NHibernate.ISession;
 
 namespace MyObjects
 {

@@ -3,13 +3,17 @@ using System.Linq;
 using System.Threading.Tasks;
 using NHibernate.Linq;
 
-namespace MyObjects
+namespace MyObjects.NHibernate
 {
+    public interface ISession : ISession<global::NHibernate.ISession>
+    {
+    }
+    
     public class NHibernateSession : ISession
     {
-        private readonly NHibernate.ISession session;
+        private readonly global::NHibernate.ISession session;
 
-        public NHibernateSession(NHibernate.ISession session)
+        public NHibernateSession(global::NHibernate.ISession session)
         {
             this.session = session;
         }
@@ -62,6 +66,6 @@ namespace MyObjects
             this.session.Clear();
         }
 
-        public NHibernate.ISession Advanced => this.session;
+        public global::NHibernate.ISession Advanced => this.session;
     }
 }
