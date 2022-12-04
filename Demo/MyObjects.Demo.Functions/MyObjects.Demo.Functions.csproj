@@ -22,14 +22,14 @@
     </ItemGroup>
     <ItemGroup>
       <ProjectReference Include="..\MyObjects.Demo\MyObjects.Demo.csproj" />
-      <ProjectReference Include="..\MyObjects.Functions\MyObjects.Functions.csproj" />
-      <ProjectReference Include="..\MyObjects.Infrastructure\MyObjects.Infrastructure.csproj" />
-      <ProjectReference Include="..\MyObjects.NHibernate\MyObjects.NHibernate.csproj" />
-      <ProjectReference Include="..\MyObjects.Testing.NHibernate\MyObjects.Testing.NHibernate.csproj" />
-      <ProjectReference Include="..\MyObjects\MyObjects.csproj" />
+      <ProjectReference Include="..\..\MyObjects.Functions\MyObjects.Functions.csproj" />
+      <ProjectReference Include="..\..\MyObjects.Infrastructure\MyObjects.Infrastructure.csproj" />
+      <ProjectReference Include="..\..\MyObjects.NHibernate\MyObjects.NHibernate.csproj" />
+      <ProjectReference Include="..\..\MyObjects.Testing.NHibernate\MyObjects.Testing.NHibernate.csproj" />
+      <ProjectReference Include="..\..\MyObjects\MyObjects.csproj" />
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\MyObjects.SourceGenerators\MyObjects.SourceGenerators.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
+        <ProjectReference Include="..\..\MyObjects.SourceGenerators\MyObjects.SourceGenerators.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
     </ItemGroup>
 </Project>

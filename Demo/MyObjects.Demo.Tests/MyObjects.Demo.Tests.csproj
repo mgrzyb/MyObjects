@@ -16,8 +16,8 @@
 
     <ItemGroup>
       <ProjectReference Include="..\MyObjects.Demo\MyObjects.Demo.csproj" />
-      <ProjectReference Include="..\MyObjects.Testing.NHibernate\MyObjects.Testing.NHibernate.csproj" />
-      <ProjectReference Include="..\MyObjects.Testing\MyObjects.Testing.csproj" />
+      <ProjectReference Include="..\..\MyObjects.Testing.NHibernate\MyObjects.Testing.NHibernate.csproj" />
+      <ProjectReference Include="..\..\MyObjects.Testing\MyObjects.Testing.csproj" />
     </ItemGroup>
 
 </Project>

@@ -14,13 +14,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyObjects.Testing.NHibernat
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyObjects.Infrastructure", "MyObjects.Infrastructure\MyObjects.Infrastructure.csproj", "{04625EC5-843C-414D-8B3D-D5FE161B6EAC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyObjects.Demo", "MyObjects.Demo\MyObjects.Demo.csproj", "{6C311BD4-C6ED-41A1-BBF0-6A1DF45237D5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyObjects.Demo", "Demo\MyObjects.Demo\MyObjects.Demo.csproj", "{6C311BD4-C6ED-41A1-BBF0-6A1DF45237D5}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Demo", "Demo", "{BCB9036F-B426-4EC6-BF6D-6DA1A33E6FEE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyObjects.Demo.Tests", "MyObjects.Demo.Tests\MyObjects.Demo.Tests.csproj", "{DDD03EE0-1DB2-4185-AFF6-A1C2E1A871F0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyObjects.Demo.Tests", "Demo\MyObjects.Demo.Tests\MyObjects.Demo.Tests.csproj", "{DDD03EE0-1DB2-4185-AFF6-A1C2E1A871F0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyObjects.Demo.Functions", "MyObjects.Demo.Functions\MyObjects.Demo.Functions.csproj", "{F86BC8B9-810C-4984-8950-C729E1363036}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyObjects.Demo.Functions", "Demo\MyObjects.Demo.Functions\MyObjects.Demo.Functions.csproj", "{F86BC8B9-810C-4984-8950-C729E1363036}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NHibernate", "NHibernate", "{240E6494-A4DD-4AB5-9620-95E0F144B407}"
 EndProject
