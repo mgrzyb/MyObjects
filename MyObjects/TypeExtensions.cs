@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using Autofac;
+using System.Linq;
 
 namespace MyObjects
 {
@@ -8,9 +8,12 @@ namespace MyObjects
     {
         public static bool IsEnumerable(this Type type, out Type elementType)
         {
-            if (type.IsClosedTypeOf(typeof(IEnumerable<>)))
+            var enumerable = new [] {type}.Concat(type.GetInterfaces())
+                .FirstOrDefault(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IEnumerable<>));
+            
+            if (enumerable != null)
             {
-                elementType = type.GetGenericArguments()[0];
+                elementType = enumerable.GetGenericArguments()[0];
                 return true;
             }
             else

@@ -1,0 +1,35 @@
+<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+        <AzureFunctionsVersion>V4</AzureFunctionsVersion>
+    </PropertyGroup>
+    <PropertyGroup>
+        <EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
+    </PropertyGroup>
+    <ItemGroup>
+        <PackageReference Include="Autofac.Extensions.DependencyInjection.AzureFunctions" Version="7.2.0.92" />
+        <PackageReference Include="Microsoft.NET.Sdk.Functions" Version="4.1.1" />
+        <PackageReference Include="NHibernate" Version="5.4.0" />
+    </ItemGroup>
+    <ItemGroup>
+        <None Update="host.json">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Update="local.settings.json">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+            <CopyToPublishDirectory>Never</CopyToPublishDirectory>
+        </None>
+    </ItemGroup>
+    <ItemGroup>
+      <ProjectReference Include="..\MyObjects.Demo\MyObjects.Demo.csproj" />
+      <ProjectReference Include="..\MyObjects.Functions\MyObjects.Functions.csproj" />
+      <ProjectReference Include="..\MyObjects.Infrastructure\MyObjects.Infrastructure.csproj" />
+      <ProjectReference Include="..\MyObjects.NHibernate\MyObjects.NHibernate.csproj" />
+      <ProjectReference Include="..\MyObjects.Testing.NHibernate\MyObjects.Testing.NHibernate.csproj" />
+      <ProjectReference Include="..\MyObjects\MyObjects.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\MyObjects.SourceGenerators\MyObjects.SourceGenerators.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
+    </ItemGroup>
+</Project>

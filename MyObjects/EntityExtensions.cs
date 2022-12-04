@@ -1,7 +1,5 @@
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using NHibernate.Linq;
 
 namespace MyObjects
 {
@@ -18,10 +16,10 @@ namespace MyObjects
             return entities.Select(GetReference);
         }
 
-        public static Task<List<Reference<TEntity>>> ToReferenceListAsync<TEntity>(this IQueryable<TEntity> entities)
+        public static IQueryable<Reference<TEntity>> AsReferenceList<TEntity>(this IQueryable<TEntity> entities)
             where TEntity : IEntity
         {
-            return entities.Select(Reference<TEntity>.FromEntity).ToListAsync();
+            return entities.Select(Reference<TEntity>.FromEntity);
         }
     }
 }

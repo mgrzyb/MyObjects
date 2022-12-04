@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 
 namespace MyObjects.Demo.Model.Orders.Commands.Inventory.EventHandlers;
@@ -10,6 +11,6 @@ public class ReleaseInventoryWhenSalesOrderCancelled : DomainEventHandler<SalesO
 
     protected async override Task Handle(SalesOrderCanceled domainEvent)
     {
-        // TODO: Release inventory
+        Console.WriteLine("Releasing inventory");
     }
 }

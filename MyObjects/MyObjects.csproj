@@ -4,11 +4,15 @@
         <TargetFramework>net6.0</TargetFramework>
         <Nullable>enable</Nullable>
     </PropertyGroup>
+    <PropertyGroup>
+        <EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
+    </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="Autofac" Version="6.3.0" />
       <PackageReference Include="MediatR" Version="10.0.1" />
-      <PackageReference Include="NHibernate" Version="5.3.11" />
     </ItemGroup>
 
+    <ItemGroup>
+        <ProjectReference Include="..\MyObjects.SourceGenerators\MyObjects.SourceGenerators.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
+    </ItemGroup>
 </Project>

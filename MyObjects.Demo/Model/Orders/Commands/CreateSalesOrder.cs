@@ -7,14 +7,9 @@ namespace MyObjects.Demo.Model.Orders.Commands
 {
     public class CreateSalesOrder : Command<Reference<SalesOrder>>
     {
-        public IEnumerable<(Reference<Product> ProductRef, decimal Price, decimal Quantity)> Lines { get; }
+        public IEnumerable<(Reference<Product> ProductRef, decimal Price, decimal Quantity)> Lines { get; init; }
 
-        public CreateSalesOrder(IEnumerable<(Reference<Product>, decimal, decimal)> lines)
-        {
-            this.Lines = lines;
-        }
-
-        public class Handler : Handler<CreateSalesOrder>
+        public class Handler : CommandHandler<CreateSalesOrder, Reference<SalesOrder>>
         {
             private readonly INumberSequence orderNumberSequence;
             

@@ -1,4 +1,3 @@
-using MyObjects.NHibernate;
 
 namespace MyObjects.Testing
 {

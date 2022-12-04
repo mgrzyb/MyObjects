@@ -1,31 +1,53 @@
 ﻿<wpf:ResourceDictionary xml:space="preserve" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:ss="urn:shemas-jetbrains-com:settings-storage-xaml" xmlns:wpf="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
-	<s:String x:Key="/Default/CodeInspection/PencilsConfiguration/ActualSeverity/@EntryValue">DO_NOT_SHOW</s:String>
+	<s:String x:Key="/Default/CodeInspection/PencilsConfiguration/ActualSeverity/@EntryValue">SUGGESTION</s:String>
 	<s:String x:Key="/Default/Environment/AssemblyExplorer/XmlDocument/@EntryValue">&lt;AssemblyExplorer&gt;&#xD;
   &lt;Assembly Path="C:\Users\MaciejGrzyb\.nuget\packages\mediatr\9.0.0\lib\netstandard2.1\MediatR.dll" /&gt;&#xD;
-  &lt;PhysicalFolder Path="C:\Users\MaciejGrzyb\.nuget\packages\mediatr\7.0.0" Loaded="True" /&gt;&#xD;
   &lt;PhysicalFolder Path="C:\Users\MaciejGrzyb\.nuget\packages\mediatr\8.0.1" Loaded="True" /&gt;&#xD;
-  &lt;PhysicalFolder Path="C:\Users\MaciejGrzyb\.nuget\packages\mediatr\9.0.0" Loaded="True" /&gt;&#xD;
   &lt;Assembly Path="C:\Users\MaciejGrzyb\.nuget\packages\mediatr\10.0.1\lib\netstandard2.1\MediatR.dll" /&gt;&#xD;
+  &lt;Assembly Path="C:\Users\MaciejGrzyb\.nuget\packages\microsoft.codeanalysis.common\4.3.1\lib\netstandard2.0\Microsoft.CodeAnalysis.dll" /&gt;&#xD;
 &lt;/AssemblyExplorer&gt;</s:String>
 	<s:String x:Key="/Default/Environment/Hierarchy/Build/BuildTool/CustomBuildToolPath/@EntryValue">C:\Program Files\dotnet\sdk\6.0.201\MSBuild.dll</s:String>
 	<s:Int64 x:Key="/Default/Environment/Hierarchy/Build/BuildTool/MsbuildVersion/@EntryValue">4294967293</s:Int64>
-	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=604908e5_002Dae2a_002D43ca_002Db9cd_002D6ed0208eda46/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="Given_Products_WhenOrderWithLinesIsCreated_Total_MakesSense #2" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
-  &lt;TestAncestor&gt;&#xD;
-    &lt;TestId&gt;NUnit3x::DCA5379D-96F8-4A9C-9D68-A7825FA6145B::net6.0::MyObjects.Demo.UnitTests.SalesOrderTests.Given_Products_WhenOrderWithLinesIsCreated_Total_MakesSense&lt;/TestId&gt;&#xD;
-    &lt;TestId&gt;NUnit3x::DCA5379D-96F8-4A9C-9D68-A7825FA6145B::net6.0::MyObjects.Demo.UnitTests.ProductTests.CanCreateProduct&lt;/TestId&gt;&#xD;
-    &lt;TestId&gt;NUnit3x::DCA5379D-96F8-4A9C-9D68-A7825FA6145B::net6.0::MyObjects.Demo.UnitTests.SalesOrderTests.Given_SalesOrder_Cancel_Emits_DomainEvent&lt;/TestId&gt;&#xD;
-  &lt;/TestAncestor&gt;&#xD;
+	<s:String x:Key="/Default/Environment/Hierarchy/Build/SolBuilderDuo/UseMsbuildSolutionBuilder/@EntryValue">No</s:String>
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=46e43d24_002Dea24_002D4588_002D99fe_002Da5ad2fcb5cef/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="DurableTasksTests" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+  &lt;Or&gt;&#xD;
+    &lt;TestAncestor&gt;&#xD;
+      &lt;TestId&gt;NUnit3x::F7E11227-A445-4C6E-AA4A-57CD4E05139B::net6.0::MyObjects.Tests.DurableTasksTests&lt;/TestId&gt;&#xD;
+      &lt;TestId&gt;NUnit3x::DDD03EE0-1DB2-4185-AFF6-A1C2E1A871F0::net6.0::MyObjects.Demo.UnitTests.InventoryTests.ReleaseInventoryHandler_ReleasesInventory&lt;/TestId&gt;&#xD;
+      &lt;TestId&gt;NUnit3x::DDD03EE0-1DB2-4185-AFF6-A1C2E1A871F0::net6.0::MyObjects.Demo.UnitTests.SalesOrderTests.Given_Products_WhenOrderWithLinesIsCreated_Total_MakesSense&lt;/TestId&gt;&#xD;
+      &lt;TestId&gt;NUnit3x::DDD03EE0-1DB2-4185-AFF6-A1C2E1A871F0::net6.0::MyObjects.Demo.UnitTests.SalesOrderTests.Given_SalesOrder_Cancel_Emits_DomainEvent&lt;/TestId&gt;&#xD;
+    &lt;/TestAncestor&gt;&#xD;
+    &lt;Project Location="C:\Users\MaciejGrzyb\Projects\MyObjects\MyObjects.Tests" Presentation="&amp;lt;MyObjects.Tests&amp;gt;" /&gt;&#xD;
+    &lt;Project Location="C:\Users\MaciejGrzyb\Projects\MyObjects\MyObjects.Demo.Tests" Presentation="&amp;lt;Demo&amp;gt;\&amp;lt;MyObjects.Demo.Tests&amp;gt;" /&gt;&#xD;
+  &lt;/Or&gt;&#xD;
 &lt;/SessionState&gt;</s:String>
-	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=6701a0ad_002Dad15_002D46d2_002D97c4_002D72ba13764666/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="Given_Products_WhenOrderWithLinesIsCreated_Total_MakesSense" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
-  &lt;TestAncestor&gt;&#xD;
-    &lt;TestId&gt;NUnit3x::DCA5379D-96F8-4A9C-9D68-A7825FA6145B::net6.0::MyObjects.Demo.UnitTests.SalesOrderTests.Given_Products_WhenOrderWithLinesIsCreated_Total_MakesSense&lt;/TestId&gt;&#xD;
-  &lt;/TestAncestor&gt;&#xD;
-&lt;/SessionState&gt;</s:String>
-	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=c59f7e4e_002D0728_002D43c4_002D854f_002D5fa66fb944b6/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="Given_Products_WhenOrderWithLinesIsCreated_Total_MakesSense #3" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
-  &lt;TestAncestor&gt;&#xD;
-    &lt;TestId&gt;NUnit3x::DCA5379D-96F8-4A9C-9D68-A7825FA6145B::net6.0::MyObjects.Demo.UnitTests.SalesOrderTests.Given_Products_WhenOrderWithLinesIsCreated_Total_MakesSense&lt;/TestId&gt;&#xD;
-    &lt;TestId&gt;NUnit3x::DCA5379D-96F8-4A9C-9D68-A7825FA6145B::net6.0::MyObjects.Demo.UnitTests.ProductTests.CanCreateProduct&lt;/TestId&gt;&#xD;
-  &lt;/TestAncestor&gt;&#xD;
-&lt;/SessionState&gt;</s:String>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	</wpf:ResourceDictionary>

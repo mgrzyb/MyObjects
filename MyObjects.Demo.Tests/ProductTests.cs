@@ -1,11 +1,16 @@
 using System.Threading.Tasks;
 using MyObjects.Demo.Model.Products;
+using MyObjects.Testing.NHibernate;
 using NUnit.Framework;
 
 namespace MyObjects.Demo.UnitTests
 {
-    public class ProductTests : TestFixture
+    public class ProductTests : DomainModelTestFixture
     {
+        public ProductTests() : base(builder => builder.AddEntitiesFromAssemblyOf<Product>(), typeof(Product).Assembly)
+        {
+        }
+
         [Test]
         public async Task CanCreateProduct()
         {

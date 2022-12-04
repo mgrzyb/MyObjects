@@ -2,7 +2,7 @@
 
 namespace MyObjects
 {
-    public interface DomainEvent : INotification
+    public interface IDomainEvent : INotification
     {
     }
 }

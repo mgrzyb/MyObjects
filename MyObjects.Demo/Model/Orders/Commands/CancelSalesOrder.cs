@@ -12,7 +12,7 @@ public class CancelSalesOrder : Command
         OrderRef = orderRef;
     }
     
-    public class Handler : Handler<CancelSalesOrder>
+    public class Handler : CommandHandler<CancelSalesOrder>
     {
         public Handler(IDependencies dependencies) : base(dependencies)
         {

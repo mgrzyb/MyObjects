@@ -1,6 +1,6 @@
 namespace MyObjects.Demo.Model.Orders;
 
-public class SalesOrderCanceled : DomainEvent
+public class SalesOrderCanceled : IDomainEvent
 {
     public SalesOrder SalesOrder { get; }
 
