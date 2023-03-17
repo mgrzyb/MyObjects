@@ -51,7 +51,7 @@ namespace MyObjects.NHibernate
             return result;
         }
 
-        public async Task<T> TryResolve<T>(Reference<T> entityRef) where T : IEntity
+        public async Task<T?> TryResolve<T>(Reference<T> entityRef) where T : IEntity
         {
             return await this.session.GetAsync<T>(entityRef.Id);
         }

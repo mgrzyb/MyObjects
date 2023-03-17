@@ -23,7 +23,14 @@ public class LifetimeScopeCommandHandlerAdapter<TRequest, TResult> : IRequestHan
         var durableQueueFactory = scope.Resolve<DurableTaskQueueFactory>();
         while (durableQueueFactory.TryDequeue(out var task))
         {
-            await this.mediator.Send(new RunDurableTask(task.Item1, task.Item2), cancellationToken);
+            try
+            {
+                await this.mediator.Send(new RunDurableTask(task.Item1, task.Item2), cancellationToken);
+            }
+            catch(Exception e)
+            {
+                Console.WriteLine($"Exception when running durable task: {task.Item1}: {e.Message}");
+            }
         }
 
         return result;

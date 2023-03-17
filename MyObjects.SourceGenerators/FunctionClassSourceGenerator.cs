@@ -48,7 +48,7 @@ public class FunctionClassSourceGenerator : ISourceGenerator
         {{
             {(e.Handler.Parameters.SingleOrDefault(p=>p.Name == "body") is IParameterSymbol body 
                 ? $"var body = JsonConvert.DeserializeObject<{body.Type.GetFullName()}>(await new StreamReader(req.Body).ReadToEndAsync());" : "")}
-            return await this.HttpPipeline.Run(() => this.{e.Handler.Name}(
+            return await this.Pipeline.Run(() => this.{e.Handler.Name}(
                 {string.Join(", ", e.Handler.Parameters.Select(GetParameterValue))}
             ));
         }}
@@ -97,7 +97,7 @@ public class PartialFunctionClassReceiver : ISyntaxReceiver
         {
             if (classDeclarationSyntax.Modifiers.Any(m => m.IsKind(SyntaxKind.PartialKeyword)))
             {
-                if (classDeclarationSyntax.BaseList.Types.Any(t => t.ToString() == "FunctionsBase"))
+                if (classDeclarationSyntax.BaseList.Types.Any(t => t.ToString().StartsWith("FunctionsBase<")))
                 {
                     if (classDeclarationSyntax.Members.Any(m => m.IsKind(SyntaxKind.MethodDeclaration)
                                                                 && m.AttributeLists.SelectMany(l => l.Attributes)

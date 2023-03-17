@@ -2,11 +2,11 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace MyObjects.Functions;
 
-class ConvertInvalidReferenceToNotFoundDecorator : IHttpFunctionPipeline
+class ConvertInvalidReferenceToNotFoundDecorator : IFunctionPipeline<IActionResult>
 {
-    private readonly IHttpFunctionPipeline innerPipeline;
+    private readonly IFunctionPipeline<IActionResult> innerPipeline;
 
-    public ConvertInvalidReferenceToNotFoundDecorator(IHttpFunctionPipeline innerPipeline)
+    public ConvertInvalidReferenceToNotFoundDecorator(IFunctionPipeline<IActionResult> innerPipeline)
     {
         this.innerPipeline = innerPipeline;
     }

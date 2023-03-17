@@ -1,6 +1,8 @@
 using Autofac;
 using Autofac.Extensions.DependencyInjection.AzureFunctions;
+using Azure.Storage.Queues;
 using Microsoft.Azure.Functions.Extensions.DependencyInjection;
+using Microsoft.Extensions.Configuration;
 using MyObjects.Demo.Functions;
 using MyObjects.Demo.Model.Orders.Commands;
 using MyObjects.Demo.Model.Products;
@@ -30,34 +32,18 @@ public class Startup : FunctionsStartup
 
     private IContainer ConfigureContainer(ContainerBuilder builder)
     {
-        /*
-        builder
-            .Register(activator =>
-            {
-                // Example on how to bind settings from appsettings.json
-                // to a class instance
-                var section = activator.Resolve<IConfiguration>().GetSection(nameof(MySettings));
-
-                var instance = section.Get<MySettings>();
-
-                // If you expect IConfiguration to change (with reloadOnChange=true), use
-                // token to rebind.
-                ChangeToken.OnChange(
-                    () => section.GetReloadToken(),
-                    (state) => section.Bind(state),
-                    instance);
-
-                return instance;
-            })
-            .AsSelf()
-            .SingleInstance();
-            */
-
+        /*builder.RegisterMyObjects(c =>
+        {
+            c.
+        });*/
         builder.RegisterModule(new MediatorModule());
         
         builder.RegisterModule(new NHibernateModule(
-            new TestPersistenceStrategy(), 
-            builder => builder.AddEntitiesFromAssemblyOf<Product>()));
+            new TestPersistenceStrategy(), builder =>
+            {
+                builder.AddEntitiesFromAssemblyOf<Product>();
+                builder.AddEntity<DurableTask>();
+            }));
         
         builder.RegisterModule(new CommandsAndEventsModule<global::NHibernate.ISession>(
             typeof(Product).Assembly, true, true, true, true));
@@ -67,7 +53,19 @@ public class Startup : FunctionsStartup
         builder.RegisterModule(new HttpFunctionsModule(typeof(Api.SalesOrderFunctions).Assembly));
         
         builder.RegisterType<NumberSequence>().AsImplementedInterfaces().SingleInstance();
-        
+
+        builder.RegisterType<DurableTaskFunctions.ScheduleRetryWhenDurableTaskCreated>().AsImplementedInterfaces();
+        builder.RegisterType<EmailSender>().AsImplementedInterfaces();
+        builder.RegisterType<DurableEmailSender>().AsSelf();
+        builder.RegisterType<DurableEmailSender.SendEmailHandler>().AsImplementedInterfaces();
+        builder.Register(context =>
+        {
+            var configuration = context.Resolve<IConfiguration>();
+            var queueClient = new QueueClient(configuration.GetConnectionString("DurableTaskQueue"), "durable-tasks");
+            queueClient.CreateIfNotExists();
+            return queueClient;
+        }).Named<QueueClient>("durable-tasks");
+            
         return builder.Build();
     }
     

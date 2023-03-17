@@ -20,6 +20,7 @@ public class RetryRequestHandlerDecorator<T, K> : IRequestHandler<T, K> where T 
         }
         catch
         {
+            Console.WriteLine("Retrying command: " + request);
             return await this.inner.Handle(request, cancellationToken);
         }
     }

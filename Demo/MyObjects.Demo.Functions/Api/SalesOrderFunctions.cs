@@ -10,7 +10,7 @@ using NHibernate.Linq;
 
 namespace MyObjects.Demo.Functions.Api;
 
-partial class SalesOrderFunctions : FunctionsBase
+partial class SalesOrderFunctions : FunctionsBase<IActionResult>
 {
     public SalesOrderFunctions(IDependencies dependencies) : base(dependencies)
     {

@@ -24,8 +24,12 @@ public class DurableTasksModule : Module
         }).As(typeof(IDurableTaskQueue<>));
         builder.RegisterType<RunDurableTask.Handler>().AsImplementedInterfaces();
 
-        builder.RegisterAssemblyTypes(this.modelAssembly).Where(t => t.IsClosedTypeOf(typeof(IDurableTask<>)))
+        builder.RegisterAssemblyTypes(this.modelAssembly).Where(t => t.IsClosedTypeOf(typeof(IDurableTaskHandler<>)))
             .AsSelf()
             .AsImplementedInterfaces();
+
+        builder.RegisterGeneric(typeof(DurableImpl<>)).As(typeof(Durable<>));
+        builder.RegisterGeneric(typeof(DurableImpl<>.Handler)).AsSelf();
+        builder.RegisterType<DurableTaskService>().AsImplementedInterfaces();
     }
 }

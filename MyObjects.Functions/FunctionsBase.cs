@@ -2,15 +2,15 @@ using MediatR;
 
 namespace MyObjects.Functions;
 
-public class FunctionsBase
+public class FunctionsBase<TResult>
 {
     protected readonly IMediator Mediator;
     protected readonly IReadonlySession Session;
-    protected readonly IHttpFunctionPipeline HttpPipeline;
+    protected readonly IFunctionPipeline<TResult> Pipeline;
 
     public FunctionsBase(IDependencies dependencies)
     {
-        this.HttpPipeline = dependencies.HttpPipeline;
+        this.Pipeline = dependencies.Pipeline;
         this.Mediator = dependencies.Mediator;
         this.Session = dependencies.Session;
     }
@@ -19,6 +19,6 @@ public class FunctionsBase
     {
         IMediator Mediator { get; }
         IReadonlySession Session { get; }
-        IHttpFunctionPipeline HttpPipeline { get; }
+        IFunctionPipeline<TResult> Pipeline { get; }
     }
 }

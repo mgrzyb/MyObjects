@@ -1,23 +1,6 @@
 using Autofac;
-using Newtonsoft.Json;
 
 namespace MyObjects.Infrastructure;
-
-public class DurableTask : AggregateRoot
-{
-    public virtual string Type { get; protected set; }
-    public virtual string SerializedArgs { get; protected set; }
-
-    protected DurableTask()
-    {
-    }
-
-    public DurableTask(string? taskType, string args)
-    {
-        this.Type = taskType;
-        this.SerializedArgs = args;
-    }
-}
 
 internal interface IDurableTaskQueueFactory
 {
@@ -45,7 +28,7 @@ internal class DurableTaskQueueFactory : IDurableTaskQueueFactory
     }
 }
 
-class RunDurableTask : Command
+public class RunDurableTask : Command
 {
     public readonly Reference<DurableTask> TaskRef;
     public readonly Func<IComponentContext, Task> Run;
@@ -84,9 +67,9 @@ internal class DurableTaskQueue<TArgs> : IDurableTaskQueue<TArgs>
         this.innerQueue = innerQueue;
     }
 
-    public async Task Enqueue<T>(TArgs args) where T : IDurableTask<TArgs>
+    public async Task Enqueue<T>(TArgs args) where T : IDurableTaskHandler<TArgs>
     {
-        var taskRef = await this.session.Save(new DurableTask(typeof(T).FullName, JsonConvert.SerializeObject(args)));
-        this.innerQueue.Enqueue((taskRef, (IComponentContext c) => c.Resolve<T>().Run(args)));
+        var taskRef = await this.session.Save(new DurableTask(typeof(T), args));
+        this.innerQueue.Enqueue((taskRef, c => c.Resolve<T>().Run(args)));
     }
 }

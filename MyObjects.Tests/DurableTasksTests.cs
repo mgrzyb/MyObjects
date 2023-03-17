@@ -28,16 +28,46 @@ public class ConfirmOrder : Command
 {
     public class Handler : CommandHandler<ConfirmOrder>
     {
-        private readonly IDurableTaskQueue<Email> durableTaskQueue;
+        private readonly DurableEmailSender emailSender;
 
-        public Handler(IDependencies dependencies, IDurableTaskQueue<Email> durableTaskQueue) : base(dependencies)
+        public Handler(IDependencies dependencies, DurableEmailSender emailSender) : base(dependencies)
         {
-            this.durableTaskQueue = durableTaskQueue;
+            this.emailSender = emailSender;
         }
 
         public override async Task Handle(ConfirmOrder command, CancellationToken cancellationToken)
         {
-            await this.durableTaskQueue.Enqueue<SendEmail>(new Email { Subject = "Foo" });
+            await this.emailSender.EnqueueSendEmail(new Email {Subject = "Hello world!"}, "macio@example.com");
+        }
+    }
+}
+
+public interface IEmailSender
+{
+    Task SendEmail(Email email, string recipient);
+}
+
+public class DurableEmailSender
+{
+    private readonly IDurableTaskQueue<Tuple<Email, string>> queue;
+
+    public Task EnqueueSendEmail(Email email, string recipient)
+    {
+        return this.queue.Enqueue<SendEmailHandler>(new Tuple<Email, string>(email, recipient));
+    }
+
+    private class SendEmailHandler : IDurableTaskHandler<Tuple<Email, string>>
+    {
+        private readonly IEmailSender service;
+
+        public SendEmailHandler(IEmailSender service)
+        {
+            this.service = service;
+        }
+
+        public async Task Run(Tuple<Email, string> args)
+        {
+            this.service.SendEmail(args.Item1, args.Item2);
         }
     }
 }
@@ -45,12 +75,4 @@ public class ConfirmOrder : Command
 public class Email
 {
     public string Subject { get; set; }
-}
-
-class SendEmail : IDurableTask<Email>
-{
-    public async Task Run(Email args)
-    {
-        Console.WriteLine("Sending email");
-    }
 }

@@ -8,7 +8,7 @@ namespace MyObjects
     {
         Task<T> Resolve<T>(Reference<T> entityRef) where T : IEntity;
         Task<IReadOnlyList<T>> ResolveMany<T>(IEnumerable<Reference<T>> entityRefs) where T : IEntity;
-        Task<T> TryResolve<T>(Reference<T> entityRef) where T : IEntity;
+        Task<T?> TryResolve<T>(Reference<T> entityRef) where T : IEntity;
         IQueryable<T> Query<T>();
         void Clear();
     }
