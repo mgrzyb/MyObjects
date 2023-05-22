@@ -13,10 +13,9 @@ public class DecoratorSourceGenerator : ISourceGenerator
 {
     public void Initialize(GeneratorInitializationContext context)
     {
-        /*
-        if (!Debugger.IsAttached)
-            Debugger.Launch();
-        */
+        /*if (!Debugger.IsAttached)
+            Debugger.Launch();*/
+        
         context.RegisterForSyntaxNotifications(() => new PartialDecoratorReceiver());
     }
 
@@ -34,7 +33,7 @@ public class DecoratorSourceGenerator : ISourceGenerator
         var fields = userClassSymbol.GetMembers().OfType<IFieldSymbol>();
         var fieldTypes = fields.Select(f => f.Type);
 
-        var decoratedField = fields.FirstOrDefault(f => userClassSymbol.Interfaces.Contains(f.Type));
+        var decoratedField = fields.FirstOrDefault(f => userClassSymbol.Interfaces.Contains(f.Type, SymbolEqualityComparer.Default));
         if (decoratedField is null)
             return;
 
@@ -71,7 +70,8 @@ public partial class {userClassSymbol.GetName()}
         return string.Join("\n", methods
             .SelectMany(m => new[] {m.ReturnType}.Concat(m.Parameters.Select(p => p.Type)))
             .Select(t => t.ContainingNamespace)
-            .Distinct()
+            .Distinct(SymbolEqualityComparer.Default)
+            .OfType<INamespaceSymbol>()
             .Select(n => $"using {string.Join(".", n.ConstituentNamespaces)};"));
     }
 
@@ -140,7 +140,7 @@ public static class ITypeSymbolExtensions
 
     public static IEnumerable<ISymbol> GetInheritedMembers(this ITypeSymbol type)
     {
-        var types = GetBaseTypeAndInterfaces(type).Distinct();
+        var types = GetBaseTypeAndInterfaces(type).Distinct(SymbolEqualityComparer.Default).OfType<ITypeSymbol>();
         foreach (var t in types)
         {
             foreach (var member in t.GetMembers())

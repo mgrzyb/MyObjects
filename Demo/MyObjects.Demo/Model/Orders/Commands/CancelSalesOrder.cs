@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 namespace MyObjects.Demo.Model.Orders.Commands;
 
-public class CancelSalesOrder : Command
+public partial class CancelSalesOrder : Command
 {
     public Reference<SalesOrder> OrderRef { get; }
 
@@ -12,17 +12,12 @@ public class CancelSalesOrder : Command
         OrderRef = orderRef;
     }
     
-    public class Handler : CommandHandler<CancelSalesOrder>
+    public partial class Handler
     {
-        public Handler(IDependencies dependencies) : base(dependencies)
-        {
-        }
-
         public override async Task Handle(CancelSalesOrder command, CancellationToken cancellationToken)
         {
             var order = await this.Session.Resolve(command.OrderRef);
             order.Cancel();                
         }
     }
-    
 }

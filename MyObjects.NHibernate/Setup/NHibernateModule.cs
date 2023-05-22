@@ -5,6 +5,7 @@ using Module = Autofac.Module;
 
 namespace MyObjects.NHibernate;
 
+[Obsolete]
 public class NHibernateModule : Module
 {
     private readonly NHibernateConfigurationBuilder configurationBuilder;

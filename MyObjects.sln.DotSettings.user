@@ -5,10 +5,13 @@
   &lt;PhysicalFolder Path="C:\Users\MaciejGrzyb\.nuget\packages\mediatr\8.0.1" Loaded="True" /&gt;&#xD;
   &lt;Assembly Path="C:\Users\MaciejGrzyb\.nuget\packages\mediatr\10.0.1\lib\netstandard2.1\MediatR.dll" /&gt;&#xD;
   &lt;Assembly Path="C:\Users\MaciejGrzyb\.nuget\packages\microsoft.codeanalysis.common\4.3.1\lib\netstandard2.0\Microsoft.CodeAnalysis.dll" /&gt;&#xD;
+  &lt;Assembly Path="C:\Users\MaciejGrzyb\.nuget\packages\graphql\7.3.0\lib\net6.0\GraphQL.dll" /&gt;&#xD;
+  &lt;Assembly Path="C:\Users\MaciejGrzyb\.nuget\packages\hotchocolate.execution\13.0.5\lib\net6.0\HotChocolate.Execution.dll" /&gt;&#xD;
+  &lt;Assembly Path="C:\Users\MaciejGrzyb\.nuget\packages\nunit\3.13.3\lib\netstandard2.0\nunit.framework.dll" /&gt;&#xD;
 &lt;/AssemblyExplorer&gt;</s:String>
 	<s:String x:Key="/Default/Environment/Hierarchy/Build/BuildTool/CustomBuildToolPath/@EntryValue">C:\Program Files\dotnet\sdk\6.0.201\MSBuild.dll</s:String>
 	<s:Int64 x:Key="/Default/Environment/Hierarchy/Build/BuildTool/MsbuildVersion/@EntryValue">4294967293</s:Int64>
-	<s:String x:Key="/Default/Environment/Hierarchy/Build/SolBuilderDuo/UseMsbuildSolutionBuilder/@EntryValue">No</s:String>
+	
 	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=46e43d24_002Dea24_002D4588_002D99fe_002Da5ad2fcb5cef/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="DurableTasksTests" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
   &lt;Or&gt;&#xD;
     &lt;TestAncestor&gt;&#xD;
@@ -16,9 +19,11 @@
       &lt;TestId&gt;NUnit3x::DDD03EE0-1DB2-4185-AFF6-A1C2E1A871F0::net6.0::MyObjects.Demo.UnitTests.InventoryTests.ReleaseInventoryHandler_ReleasesInventory&lt;/TestId&gt;&#xD;
       &lt;TestId&gt;NUnit3x::DDD03EE0-1DB2-4185-AFF6-A1C2E1A871F0::net6.0::MyObjects.Demo.UnitTests.SalesOrderTests.Given_Products_WhenOrderWithLinesIsCreated_Total_MakesSense&lt;/TestId&gt;&#xD;
       &lt;TestId&gt;NUnit3x::DDD03EE0-1DB2-4185-AFF6-A1C2E1A871F0::net6.0::MyObjects.Demo.UnitTests.SalesOrderTests.Given_SalesOrder_Cancel_Emits_DomainEvent&lt;/TestId&gt;&#xD;
+      &lt;TestId&gt;NUnit3x::DDD03EE0-1DB2-4185-AFF6-A1C2E1A871F0::net6.0::MyObjects.Demo.UnitTests.SalesOrderTests&lt;/TestId&gt;&#xD;
     &lt;/TestAncestor&gt;&#xD;
     &lt;Project Location="C:\Users\MaciejGrzyb\Projects\MyObjects\MyObjects.Tests" Presentation="&amp;lt;MyObjects.Tests&amp;gt;" /&gt;&#xD;
     &lt;Project Location="C:\Users\MaciejGrzyb\Projects\MyObjects\MyObjects.Demo.Tests" Presentation="&amp;lt;Demo&amp;gt;\&amp;lt;MyObjects.Demo.Tests&amp;gt;" /&gt;&#xD;
+    &lt;Project Location="C:\Users\MaciejGrzyb\Projects\MyObjects\Demo\MyObjects.Demo.Tests" Presentation="&amp;lt;Demo&amp;gt;\&amp;lt;MyObjects.Demo.Tests&amp;gt;" /&gt;&#xD;
   &lt;/Or&gt;&#xD;
 &lt;/SessionState&gt;</s:String>
 	

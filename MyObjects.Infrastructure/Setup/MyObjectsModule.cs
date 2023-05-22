@@ -1,10 +1,11 @@
 using Autofac;
 using MediatR;
+using MyObjects.Infrastructure;
 using Module = Autofac.Module;
 
 namespace MyObjects
 {
-    public class MediatorModule : Module
+    public class MyObjectsModule : Module
     {
         protected override void Load(ContainerBuilder builder)
         {
@@ -13,8 +14,8 @@ namespace MyObjects
                 var componentCtx = c.Resolve<IComponentContext>();
                 return new Mediator(type => componentCtx.Resolve(type));
             }).AsImplementedInterfaces().InstancePerLifetimeScope();
-
-            builder.RegisterType<MediatorDomainEventBus>().AsImplementedInterfaces().InstancePerLifetimeScope();
-        }
+            
+            builder.RegisterDecorator<EventEmittingSessionDecorator, ISession>();
+            builder.RegisterGenericDecorator(typeof(EventEmittingSessionDecorator<>), typeof(ISession<>));        }
     }
 }

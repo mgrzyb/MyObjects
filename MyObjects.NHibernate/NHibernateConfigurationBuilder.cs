@@ -31,6 +31,12 @@ namespace MyObjects.NHibernate
             return this;
         }
 
+        public NHibernateConfigurationBuilder AddEntities(IEnumerable<Type> types)
+        {
+            this.modelTypes.AddRange(types);
+            return this;
+        }
+        
         public NHibernateConfigurationBuilder AddEntity<T>()
         {
             this.modelTypes.Add(typeof(T));

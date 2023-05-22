@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using MyObjects.Demo.Model.Orders;
 using MyObjects.Demo.Model.Orders.Commands;
 using MyObjects.Demo.Model.Products;
-using MyObjects.Testing.NHibernate;
+using MyObjects.Tests;
 using NHibernate.Linq;
 using NUnit.Framework;
 
@@ -11,17 +11,13 @@ namespace MyObjects.Demo.UnitTests
 {
     public class SalesOrderTests : DomainModelTestFixture
     {
-        public SalesOrderTests() : base(builder => builder.AddEntitiesFromAssemblyOf<Product>(), typeof(Product).Assembly)
-        {
-        }
-
         [Test]
         public async Task Given_Products_WhenOrderWithLinesIsCreated_Total_MakesSense()
         {
             var (aRef, bRef) = await Given(async s =>
             {
-                var productA = new Product();
-                var productB = new Product();
+                var productA = new Product("Foo1");
+                var productB = new Product("Foo2");
                 return (await s.Save(productB), await s.Save(productA));
             });
 
@@ -58,8 +54,8 @@ namespace MyObjects.Demo.UnitTests
 
             await When(new CancelSalesOrder(orderRef));
             
-            Assert.That(this.DomainEvents, Is.Not.Empty);
-            Assert.That(this.DomainEvents.Single(), Is.InstanceOf<SalesOrderCanceled>());
+            Assert.That(this.DomainEvents, Has.One.Event<SalesOrderCanceled>(e => e.SalesOrder.GetReference() == orderRef));
         }
+
     }
 }

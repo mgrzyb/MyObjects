@@ -10,17 +10,18 @@ using NUnit.Framework;
 namespace MyObjects.Tests;
 
 [TestFixture]
-public class DurableTasksTests : IntegrationTestFixture
+public class DurableTasksTests : NHibernateIntegrationTestFixture
 {
     public DurableTasksTests() 
-        : base(builder => builder.AddEntity<DurableTask>(), typeof(DurableTasksTests).Assembly)
+        : base(typeof(DurableTasksTests).Assembly)
     {
+        With(builder => builder.RegisterType<DurableEmailSender>().AsSelf());
     }
 
     [Test]
     public async Task Test()
     {
-        await this.Context.Resolve<IMediator>().Send(new ConfirmOrder());
+        await When(new ConfirmOrder());
     }
 }
 
@@ -50,6 +51,11 @@ public interface IEmailSender
 public class DurableEmailSender
 {
     private readonly IDurableTaskQueue<Tuple<Email, string>> queue;
+
+    public DurableEmailSender(IDurableTaskQueue<Tuple<Email, string>> queue)
+    {
+        this.queue = queue;
+    }
 
     public Task EnqueueSendEmail(Email email, string recipient)
     {

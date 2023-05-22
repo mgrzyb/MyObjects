@@ -1,33 +1,47 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using Autofac;
-using Autofac.Core;
 using MediatR;
+using MyObjects.Demo.Functions;
 using MyObjects.Infrastructure;
+using MyObjects.Infrastructure.Setup;
 
 namespace MyObjects.Testing;
 
-public class DomainModelTestFixtureBase<TAdvancedSession> : ContainerBasedTestFixture, IDomainEventBus
+public abstract class DomainModelTestFixture<TAdvancedSession> : ContainerBasedTestFixture, IDomainEventBus
 {
-    private readonly ITestCodeRunner<TAdvancedSession> runner;
 
     private IList<IDomainEvent> domainEvents;
     protected IEnumerable<IDomainEvent> DomainEvents => this.domainEvents;
 
-    protected DomainModelTestFixtureBase(ITestCodeRunner<TAdvancedSession> runner, Assembly modelAssembly, IEnumerable<IModule> modules)
-        : base(modules.Concat(new IModule[]
-        {
-            new MediatorModule(), 
-            new CommandsAndEventsModule<TAdvancedSession>(modelAssembly, true, false, true, false)
-        }))
+    private readonly Assembly[] assemblies;
+    private readonly ITestCodeRunner<TAdvancedSession> runner;
+    
+    protected DomainModelTestFixture(ITestCodeRunner<TAdvancedSession> runner, params Assembly[] assemblies)
     {
         this.runner = runner;
+        this.assemblies = assemblies;
     }
 
+    protected override IContainer CreateContainer(ContainerBuilder builder)
+    {
+        this.SetupMyObjectsRegistration(builder.AddMyObjects(this.assemblies))
+            .AddCommandHandlers(c => c
+                .EmitDomainEvents())
+            .AddDomainEventHandlers();
+
+        this.domainEvents = new List<IDomainEvent>();
+        builder.RegisterInstance(this).As<IDomainEventBus>();
+        
+        return builder.Build();
+    }
+
+    protected abstract MyObjectsRegistration<TAdvancedSession> SetupMyObjectsRegistration(
+        MyObjectsRegistration registration);
+    
     protected Task<K> Given<K>(Func<ISession<TAdvancedSession>, Task<K>> given)
     {
         return this.RunInLifetimeScope(scope => this.runner.Run<K>(scope, given));
@@ -69,10 +83,10 @@ public class DomainModelTestFixtureBase<TAdvancedSession> : ContainerBasedTestFi
 
     protected class EventHandlerRunner<TEvent> where TEvent : IDomainEvent
     {
-        private readonly DomainModelTestFixtureBase<TAdvancedSession> fixture;
+        private readonly DomainModelTestFixture<TAdvancedSession> fixture;
         private readonly Func<IReadonlySession, Task<TEvent>> e;
 
-        public EventHandlerRunner(DomainModelTestFixtureBase<TAdvancedSession> fixture, Func<IReadonlySession, Task<TEvent>> e)
+        public EventHandlerRunner(DomainModelTestFixture<TAdvancedSession> fixture, Func<IReadonlySession, Task<TEvent>> e)
         {
             this.fixture = fixture;
             this.e = e;
@@ -87,12 +101,6 @@ public class DomainModelTestFixtureBase<TAdvancedSession> : ContainerBasedTestFi
                 return string.Empty;
             });
         }
-    }
-
-    protected override void ConfigureTestScope(ContainerBuilder builder)
-    {
-        this.domainEvents = new List<IDomainEvent>();
-        builder.RegisterInstance(this).As<IDomainEventBus>();
     }
 
     public Task Publish(IDomainEvent e)

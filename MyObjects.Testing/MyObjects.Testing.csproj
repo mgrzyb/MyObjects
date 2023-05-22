@@ -7,6 +7,7 @@
     <ItemGroup>
         <PackageReference Include="Autofac" Version="6.3.0" />
         <PackageReference Include="Autofac.Extras.AggregateService" Version="6.1.2" />
+        <PackageReference Include="Moq" Version="4.17.2" />
         <PackageReference Include="NUnit" Version="3.13.3" />
     </ItemGroup>
 

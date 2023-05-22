@@ -1,14 +1,12 @@
-using System.Threading.Tasks;
 using System;
 using System.Text;
+using System.Threading.Tasks;
 using Autofac.Features.Indexed;
 using Azure.Storage.Queues;
-using MediatR;
 using Microsoft.Azure.WebJobs;
-using Microsoft.Extensions.Logging;
 using MyObjects.Infrastructure;
 
-namespace MyObjects.Demo.Functions;
+namespace MyObjects.Demo.Functions.Infrastructure;
 
 public class DurableTaskFunctions
 {

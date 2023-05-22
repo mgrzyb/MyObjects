@@ -7,10 +7,9 @@ using NUnit.Framework;
 namespace MyObjects.Tests;
 
 [TestFixture]
-public class CommandsAndEventsTests : IntegrationTestFixture
+public class CommandsAndEventsTests : NHibernateIntegrationTestFixture
 {
-    public CommandsAndEventsTests()
-        : base(builder => builder.AddEntity<A>(), typeof(CommandsAndEventsTests).Assembly)
+    public CommandsAndEventsTests() : base(typeof(CommandsAndEventsTests).Assembly)
     {
     }
 

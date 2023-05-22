@@ -9,7 +9,7 @@ namespace MyObjects.NHibernate
     {
     }
     
-    public class NHibernateSession : ISession
+    public class NHibernateSession : ISession, IDisposable
     {
         private readonly global::NHibernate.ISession session;
 
@@ -67,5 +67,10 @@ namespace MyObjects.NHibernate
         }
 
         public global::NHibernate.ISession Advanced => this.session;
+
+        public void Dispose()
+        {
+            this.session.Dispose();
+        }
     }
 }

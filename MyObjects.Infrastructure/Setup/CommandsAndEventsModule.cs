@@ -64,6 +64,10 @@ public class CommandsAndEventsModule<TAdvancedSession> : Module
                 typeof(ICommandHandler<,>));
         }
 
+        builder.RegisterGenericDecorator(
+            typeof(DurableTasksRunningDecorator<,>),
+            typeof(ICommandHandler<,>));
+        
         if (this.scopeCommands)
             builder.RegisterGeneric(typeof(LifetimeScopeCommandHandlerAdapter<,>)).AsImplementedInterfaces();
         else

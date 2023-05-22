@@ -1,15 +1,13 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 using NHibernate.Mapping.ByCode;
+using NHibernate.Properties;
 
 namespace MyObjects.NHibernate
 {
     class ModelMappingConventions
     {
         private readonly Dictionary<Type, Type> userTypes = new Dictionary<Type, Type>();
-
+        
         public void AddUserType<T>() where T : UserType<T>
         {
             this.userTypes.Add(typeof(T).GetProperty(nameof(UserType<T>.Instance)).PropertyType, typeof(T));
@@ -64,6 +62,8 @@ namespace MyObjects.NHibernate
 
             modelMapper.BeforeMapProperty += (inspector, member, customizer) =>
             {
+                if (member.LocalMember is PropertyInfo {CanWrite: false} p && PropertyToField.GetBackFieldInfo(p) != null) customizer.Access(typeof(BackFieldAccessor));
+
                 var memberType = member.LocalMember.GetPropertyOrFieldType();
                 var uniqueAttribute = member.LocalMember.GetCustomAttribute<UniqueAttribute>();
                 if (uniqueAttribute != null)
@@ -119,6 +119,7 @@ namespace MyObjects.NHibernate
                 type.BaseType == typeof(Entity) || type.BaseType == typeof(AggregateRoot));
             modelMapper.IsVersion((property, b) => property.Name == nameof(Entity.Version));
             modelMapper.IsProperty((info, declared) => declared || this.userTypes.ContainsKey(info.GetPropertyOrFieldType()));
+            modelMapper.IsPersistentProperty((info, declared) => declared || (info is PropertyInfo p && p.GetCustomAttribute<TransientAttribute>() == null));
             modelMapper.IsOneToMany((memberInfo, declared) =>
             {
                 if (declared)
@@ -126,12 +127,19 @@ namespace MyObjects.NHibernate
 
                 var collectionType = memberInfo.GetPropertyOrFieldType();
 
-                return collectionType.IsEnumerableOf<Entity>() &&
-                       collectionType.IsEnumerableOf<AggregateRoot>() == false;
+                return collectionType.IsEnumerable(out var elementType) &&
+                       elementType.IsAssignableTo(typeof(Entity)) &&
+                       (elementType.IsAssignableTo(typeof(AggregateRoot)) == false || elementType == memberInfo.DeclaringType);
             });
 
             modelMapper.IsManyToMany((memberInfo, declared) =>
-                declared || memberInfo.GetPropertyOrFieldType().IsEnumerableOf<AggregateRoot>());
+            {
+                if (declared)
+                    return true;
+                return memberInfo.GetPropertyOrFieldType().IsEnumerable(out var elementType) 
+                       && elementType.IsAssignableTo(typeof(AggregateRoot)) 
+                       && memberInfo.DeclaringType != elementType;
+            });
             modelMapper.IsList((info, declared) =>
             {
                 if (declared)
@@ -150,6 +158,16 @@ namespace MyObjects.NHibernate
         private static void OnBeforeMapCollection(IModelInspector inspector, PropertyPath member,
             ICollectionPropertiesMapper customizer)
         {
+            if(member.LocalMember.GetCustomAttribute<FetchAttribute>() is {} fetch)
+            {
+                customizer.Fetch(fetch.Mode);
+            }
+
+            if (member.LocalMember.GetCustomAttribute<BatchAttribute>() is { } batch)
+            {
+                customizer.BatchSize(batch.Size);
+            }
+
             customizer.Key(mapper =>
             {
                 mapper.Column(columnMapper => columnMapper.Name(member.GetContainerEntity(inspector).Name + "Id"));
@@ -188,6 +206,13 @@ namespace MyObjects.NHibernate
 
                 customizer.Cascade(Cascade.All | Cascade.DeleteOrphans);
             }
+        }
+    }
+
+    internal class BackFieldAccessor : FieldAccessor
+    {
+        public BackFieldAccessor() : base(new BackFieldStrategy())
+        {
         }
     }
 }

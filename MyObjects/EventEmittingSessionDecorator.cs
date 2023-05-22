@@ -13,14 +13,16 @@ public partial class EventEmittingSessionDecorator : ISession
 
     public Task<Reference<T>> Save<T>(T entity) where T : AggregateRoot
     {
+        var save = this.session.Save(entity);
         entity.Publish(new AggregateCreated<T>(entity));
-        return this.session.Save(entity);
+        return save;
     }
 
     public Task Delete<T>(T entity) where T : AggregateRoot
     {
+        var delete = this.session.Delete(entity);
         entity.Publish(new AggregateDeleted<T>(entity));
-        return this.session.Delete(entity);
+        return delete;
     }
 }
 

@@ -32,9 +32,9 @@ namespace MyObjects
             do
             {
                 moreEvents = false;
+                
                 var aggregateRoots = this.aggregateRootLocator.GetAggregateRoots();
-
-
+                
                 foreach (var aggregateRoot in aggregateRoots.ToList())
                 {
                     while (aggregateRoot.TryDequeueDomainEvent(out var e))

@@ -6,9 +6,9 @@ using NUnit.Framework;
 
 namespace MyObjects.Tests
 {
-    public class EntityTests : DomainModelTestFixture
+    public class EntityTests : NHibernateDomainModelTestFixture
     {
-        public EntityTests() : base(builder => builder.AddEntity<A>(), typeof(EntityTests).Assembly)
+        public EntityTests() : base(typeof(EntityTests).Assembly)
         {
         }
 
