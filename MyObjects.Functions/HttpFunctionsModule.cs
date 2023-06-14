@@ -28,5 +28,6 @@ public class HttpFunctionsModule : Module
 
         builder.RegisterType<FunctionPipeline<IActionResult>>().AsImplementedInterfaces();
         builder.RegisterDecorator<ConvertInvalidReferenceToNotFoundDecorator, IFunctionPipeline<IActionResult>>();
+        builder.RegisterDecorator<ConvertConcurrencyViolationToConflictDecorator, IFunctionPipeline<IActionResult>>();
     }
 }

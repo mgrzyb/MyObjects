@@ -7,7 +7,7 @@ namespace MyObjects.Demo.Model.Products;
 public partial class ProductCategory : AggregateRoot
 {
     public virtual string Name { get; protected internal set; }
-    public virtual int ExternalId { get; init; }
+    public virtual int? ExternalId { get; protected internal set; }
     public virtual ProductCategory Parent { get; protected set; }
     
     [FetchWithSubselect]

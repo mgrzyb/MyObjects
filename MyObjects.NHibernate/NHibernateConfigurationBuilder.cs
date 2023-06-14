@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using NHibernate.Cfg;
 using NHibernate.Cfg.MappingSchema;
+using NHibernate.Event;
 using NHibernate.Mapping.ByCode;
 
 namespace MyObjects.NHibernate
@@ -52,6 +53,7 @@ namespace MyObjects.NHibernate
         public Configuration Build()
         {
             var cfg = new Configuration();
+            cfg.AppendListeners(ListenerType.LoadCollection, new [] { new WarnAboutSyncInitializationListener() });
             cfg.AddMapping(this.BuildModelMapping());
             this.persistenceStrategy.ApplyTo(cfg);
             return cfg;
@@ -72,6 +74,19 @@ namespace MyObjects.NHibernate
             var mapping = modelMapper.CompileMappingFor(modelTypes);
             
             return mapping;
+        }
+    }
+
+    public class WarnAboutSyncInitializationListener : IInitializeCollectionEventListener
+    {
+        public Task OnInitializeCollectionAsync(InitializeCollectionEvent @event, CancellationToken cancellationToken)
+        {
+            return Task.CompletedTask;
+        }
+        
+        public void OnInitializeCollection(InitializeCollectionEvent @event)
+        {
+            Console.WriteLine("WARN: Sync initialization of collection: " + @event.Collection.Role);
         }
     }
 }

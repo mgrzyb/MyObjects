@@ -3,6 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Autofac;
 using MediatR;
+using Moq;
 using MyObjects.Infrastructure;
 using MyObjects.Testing.NHibernate;
 using NUnit.Framework;
@@ -15,18 +16,25 @@ public class DurableTasksTests : NHibernateIntegrationTestFixture
     public DurableTasksTests() 
         : base(typeof(DurableTasksTests).Assembly)
     {
-        With(builder => builder.RegisterType<DurableEmailSender>().AsSelf());
     }
 
     [Test]
     public async Task Test()
     {
+        var emailSender = new Mock<IEmailSender>();
+        With(b => b.RegisterInstance(emailSender.Object).AsImplementedInterfaces());            
+        With(b => b.RegisterType<DurableEmailSender>().AsSelf());
+
         await When(new ConfirmOrder());
+        
+        emailSender.Verify(es => es.SendEmail(It.IsAny<Email>(), It.IsAny<string>()), Times.Once());
     }
 }
 
 public class ConfirmOrder : Command
 {
+    private int attempt = 0;
+    
     public class Handler : CommandHandler<ConfirmOrder>
     {
         private readonly DurableEmailSender emailSender;
@@ -38,7 +46,10 @@ public class ConfirmOrder : Command
 
         public override async Task Handle(ConfirmOrder command, CancellationToken cancellationToken)
         {
+            command.attempt++;
             await this.emailSender.EnqueueSendEmail(new Email {Subject = "Hello world!"}, "macio@example.com");
+            if (command.attempt == 1)
+                throw new ConcurrencyViolationException("I want to be retried");
         }
     }
 }

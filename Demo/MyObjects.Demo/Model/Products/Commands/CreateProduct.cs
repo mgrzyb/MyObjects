@@ -5,21 +5,21 @@ using System.Threading.Tasks;
 
 namespace MyObjects.Demo.Model.Products.Commands;
 
-public class CreateProduct : Command<Reference<Product>>
+public partial class CreateProduct : Command<Reference<Product>>, IPartialDtoFor<Product>
 {
-    public string Name { get; set; }
-    public int ExternalId { get; set; }
+    public string Name { get; }
     public IEnumerable<Reference<ProductCategory>> Categories { get; }
 
     public CreateProduct(string name) : this(name, Enumerable.Empty<Reference<ProductCategory>>())
     {
     }
-    
+
     public CreateProduct(string name, IEnumerable<Reference<ProductCategory>> categories)
     {
-        Name = name;
-        Categories = categories;
+        this.Name = name;
+        this.Categories = categories;
     }
+
 
     public class Handler : CommandHandler<CreateProduct, Reference<Product>>
     {
@@ -31,6 +31,7 @@ public class CreateProduct : Command<Reference<Product>>
         {
             var product = new Product(command.Name)
             {
+                Description = command.Description,
                 ExternalId = command.ExternalId, 
             };
 
@@ -42,4 +43,5 @@ public class CreateProduct : Command<Reference<Product>>
             return await this.Session.Save(product);
         }
     }
+
 }

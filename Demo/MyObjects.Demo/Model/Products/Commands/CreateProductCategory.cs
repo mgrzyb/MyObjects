@@ -4,11 +4,10 @@ using System.Threading.Tasks;
 
 namespace MyObjects.Demo.Model.Products.Commands;
 
-public class CreateProductCategory : Command<Reference<ProductCategory>>
+public partial class CreateProductCategory : Command<VersionedReference<ProductCategory>>, IPartialDtoFor<ProductCategory>
 {
-    public string Name { get; set; }
+    public string Name { get; }
     public Reference<ProductCategory>? ParentRef { get; }
-    public int ExternalId { get; init; }
 
     public CreateProductCategory(string name)
     {
@@ -21,18 +20,28 @@ public class CreateProductCategory : Command<Reference<ProductCategory>>
         ParentRef = parentRef;
     }
 
-    public class Handler : CommandHandler<CreateProductCategory, Reference<ProductCategory>>
+    public class Handler : CommandHandler<CreateProductCategory, VersionedReference<ProductCategory>>
     {
         public Handler(IDependencies dependencies) : base(dependencies)
         {
         }
 
-        public override async Task<Reference<ProductCategory>> Handle(CreateProductCategory command, CancellationToken cancellationToken)
+        public override async Task<VersionedReference<ProductCategory>> Handle(CreateProductCategory command, CancellationToken cancellationToken)
         {
             if (command.ParentRef is null)
-                return await this.Session.Save(new ProductCategory(command.Name) { ExternalId = command.ExternalId });
+            {
+                return await this.Session.Save(new ProductCategory(command.Name)
+                {
+                    ExternalId = command.ExternalId
+                });
+            }
             else
-                return await this.Session.Save(new ProductCategory(command.Name, await this.Session.Resolve(command.ParentRef)) { ExternalId = command.ExternalId });
+            {
+                return await this.Session.Save(new ProductCategory(command.Name, await this.Session.Resolve(command.ParentRef))
+                {
+                    ExternalId = command.ExternalId
+                });
+            }
         }
     }
 }

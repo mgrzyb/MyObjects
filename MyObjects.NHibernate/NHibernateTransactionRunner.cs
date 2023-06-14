@@ -9,13 +9,29 @@ class NHibernateTransactionRunner : ITransactionRunner
         this.session = session;
     }
 
+    public Task RunInTransaction(Func<Task> a)
+    {
+        return this.RunInTransaction(async () =>
+        {
+            await a();
+            return string.Empty;
+        });
+    }
+    
     public async Task<T> RunInTransaction<T>(Func<Task<T>> a)
     {
         using (var transaction = this.session.BeginTransaction())
         {
-            var result = await a();                
-            await transaction.CommitAsync();
-            return result;
+            try
+            {
+                var result = await a();
+                await transaction.CommitAsync();
+                return result;
+            }
+            catch (global::NHibernate.StaleObjectStateException e)
+            {
+                throw new ConcurrencyViolationException(e.EntityName, e.Identifier, e);
+            }
         }
     }
 }

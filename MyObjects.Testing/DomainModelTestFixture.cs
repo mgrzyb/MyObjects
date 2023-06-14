@@ -44,7 +44,12 @@ public abstract class DomainModelTestFixture<TAdvancedSession> : ContainerBasedT
     
     protected Task<K> Given<K>(Func<ISession<TAdvancedSession>, Task<K>> given)
     {
-        return this.RunInLifetimeScope(scope => this.runner.Run<K>(scope, given));
+        return this.RunInLifetimeScope(scope => this.runner.Run(scope, given));
+    }
+
+    protected Task When(Func<ISession<TAdvancedSession>, Task> when)
+    {
+        return this.RunInLifetimeScope(scope => this.runner.Run(scope, when));
     }
 
     protected Task<K> When<K>(Func<ISession<TAdvancedSession>, Task<K>> when)

@@ -17,6 +17,9 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyObjects.Demo", "Demo\MyObjects.Demo\MyObjects.Demo.csproj", "{6C311BD4-C6ED-41A1-BBF0-6A1DF45237D5}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Demo", "Demo", "{BCB9036F-B426-4EC6-BF6D-6DA1A33E6FEE}"
+	ProjectSection(SolutionItems) = preProject
+		Demo\.netconfig = Demo\.netconfig
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyObjects.Demo.Tests", "Demo\MyObjects.Demo.Tests\MyObjects.Demo.Tests.csproj", "{DDD03EE0-1DB2-4185-AFF6-A1C2E1A871F0}"
 EndProject
@@ -25,6 +28,13 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NHibernate", "NHibernate", "{240E6494-A4DD-4AB5-9620-95E0F144B407}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyObjects.Functions", "MyObjects.Functions\MyObjects.Functions.csproj", "{6099E045-1E8B-4A7D-A915-6521CB9924FB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyObjects.Tools.NHibernate", "MyObjects.Tools.NHibernate\MyObjects.Tools.NHibernate.csproj", "{B7D28E0A-211E-48B9-900D-E80A4FFC13A8}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tools", "Tools", "{DAAA59C6-37F0-451B-9464-8E971E1C29B0}"
+	ProjectSection(SolutionItems) = preProject
+		Demo\.config\dotnet-tools.json = Demo\.config\dotnet-tools.json
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -76,6 +86,10 @@ Global
 		{6099E045-1E8B-4A7D-A915-6521CB9924FB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6099E045-1E8B-4A7D-A915-6521CB9924FB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6099E045-1E8B-4A7D-A915-6521CB9924FB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B7D28E0A-211E-48B9-900D-E80A4FFC13A8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B7D28E0A-211E-48B9-900D-E80A4FFC13A8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B7D28E0A-211E-48B9-900D-E80A4FFC13A8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B7D28E0A-211E-48B9-900D-E80A4FFC13A8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{6C311BD4-C6ED-41A1-BBF0-6A1DF45237D5} = {BCB9036F-B426-4EC6-BF6D-6DA1A33E6FEE}
@@ -83,5 +97,7 @@ Global
 		{F86BC8B9-810C-4984-8950-C729E1363036} = {BCB9036F-B426-4EC6-BF6D-6DA1A33E6FEE}
 		{C1E6D71A-CDAE-457B-9E15-3561BFF849D2} = {240E6494-A4DD-4AB5-9620-95E0F144B407}
 		{3F30F36E-BB73-4C0A-9733-543398B0E483} = {240E6494-A4DD-4AB5-9620-95E0F144B407}
+		{B7D28E0A-211E-48B9-900D-E80A4FFC13A8} = {240E6494-A4DD-4AB5-9620-95E0F144B407}
+		{DAAA59C6-37F0-451B-9464-8E971E1C29B0} = {BCB9036F-B426-4EC6-BF6D-6DA1A33E6FEE}
 	EndGlobalSection
 EndGlobal

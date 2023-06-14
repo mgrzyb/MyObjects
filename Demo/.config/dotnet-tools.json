@@ -1,0 +1,12 @@
+{
+  "version": 1,
+  "isRoot": true,
+  "tools": {
+    "myobjects.tools.nhibernate": {
+      "version": "1.0.0.1",
+      "commands": [
+        "nh"
+      ]
+    }
+  }
+}

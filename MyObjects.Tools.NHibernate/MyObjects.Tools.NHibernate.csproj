@@ -1,0 +1,29 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>net6.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <PackAsTool>true</PackAsTool>
+        <ToolCommandName>nh</ToolCommandName>
+        <PackageOutputPath>./nupkg</PackageOutputPath>
+        <PackageVersion>1.0.0.1</PackageVersion>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="DotNetConfig.CommandLine" Version="1.0.6" />
+      <PackageReference Include="NHibernate" Version="5.4.2" />
+      <PackageReference Include="System.Data.SqlClient" Version="4.8.5" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\MyObjects.NHibernate\MyObjects.NHibernate.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Remove="MigrationClassTemplate.cs_" />
+      <EmbeddedResource Include="MigrationClassTemplate.cs_" />
+    </ItemGroup>
+
+</Project>

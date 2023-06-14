@@ -15,8 +15,12 @@ public class ProjectedQuery<T, TDto>
         this.mapper = mapper;
     }
 
-    public IQueryable<TDto> Run()
+    public IQueryable<TDto> Run(int? skip = null, int? take = null)
     {
-        return this.session.Query<T>().ProjectTo<TDto>(this.mapper.ConfigurationProvider);
+        var query = this.session.Query<T>();
+        if (skip.HasValue)
+            query = query.Skip(skip.Value);
+        query = query.Take(take ?? 1000);
+        return query.ProjectTo<TDto>(this.mapper.ConfigurationProvider);
     }
 }

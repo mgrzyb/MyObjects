@@ -7,7 +7,12 @@ namespace MyObjects
     {
         public static Reference<T> GetReference<T>(this T entity) where T : IEntity
         {
-            return new Reference<T>(entity.Id);
+            return new Reference<T>(entity);
+        }
+
+        public static VersionedReference<T> GetVersionedReference<T>(this T entity) where T : IEntity
+        {
+            return new VersionedReference<T>(entity);
         }
         
         public static IEnumerable<Reference<T>> AsReferences<T>(this IEnumerable<T> entities) 

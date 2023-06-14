@@ -6,6 +6,7 @@ namespace MyObjects
     {
         int Id { get; }
         int Version { get; }
+        Type GetEntityType();
     }
     
     public abstract class Entity : IEntity
@@ -24,7 +25,7 @@ namespace MyObjects
         {
         }
 
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             return this.Equals(obj as Entity);
         }
@@ -34,7 +35,7 @@ namespace MyObjects
             return obj != null && Equals(obj.Id, default(int));
         }
 
-        public virtual bool Equals(Entity other)
+        public virtual bool Equals(Entity? other)
         {
             if (other == null) 
                 return false;
@@ -48,23 +49,23 @@ namespace MyObjects
             if (Equals(this.Id, other.Id) == false) 
                 return false;
             
-            var otherType = other.GetUnproxiedType();
-            var thisType = this.GetUnproxiedType();
+            var otherType = other.GetEntityType();
+            var thisType = this.GetEntityType();
 
             return thisType == otherType;
         }
 
         public override int GetHashCode()
         {
-            return HashCode.Combine(this.GetUnproxiedType(), this.Id);
+            return HashCode.Combine(this.GetEntityType(), this.Id);
         }
 
         public override string ToString()
         {
-            return $"{this.GetUnproxiedType().Name}:{this.Id}";
+            return $"{this.GetEntityType().Name}:{this.Id}";
         }
 
-        protected virtual Type GetUnproxiedType()
+        public virtual Type GetEntityType()
         {
             //
             // This method looks like an equivalent of GetType() but since it is protected virtual,
@@ -73,7 +74,7 @@ namespace MyObjects
             //
             return this.GetType();
         }
-
+        
         public static bool operator ==(Entity left, object right)
         {
             return Equals(left, right);

@@ -20,7 +20,7 @@ class DurableTasksRunningDecorator<TRequest, TResult> : ICommandHandler<TRequest
     {
         var result = await this.innerHandler.Handle(command, cancellationToken);
 
-        while (this.taskQueueFactory.TryDequeue(out var task))
+        while (this.taskQueueFactory.TryDequeueFromQueue(out var task))
         {
             try
             {

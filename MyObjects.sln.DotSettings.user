@@ -1,4 +1,5 @@
 ﻿<wpf:ResourceDictionary xml:space="preserve" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:ss="urn:shemas-jetbrains-com:settings-storage-xaml" xmlns:wpf="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
+	
 	<s:String x:Key="/Default/CodeInspection/PencilsConfiguration/ActualSeverity/@EntryValue">SUGGESTION</s:String>
 	<s:String x:Key="/Default/Environment/AssemblyExplorer/XmlDocument/@EntryValue">&lt;AssemblyExplorer&gt;&#xD;
   &lt;Assembly Path="C:\Users\MaciejGrzyb\.nuget\packages\mediatr\9.0.0\lib\netstandard2.1\MediatR.dll" /&gt;&#xD;
@@ -8,6 +9,7 @@
   &lt;Assembly Path="C:\Users\MaciejGrzyb\.nuget\packages\graphql\7.3.0\lib\net6.0\GraphQL.dll" /&gt;&#xD;
   &lt;Assembly Path="C:\Users\MaciejGrzyb\.nuget\packages\hotchocolate.execution\13.0.5\lib\net6.0\HotChocolate.Execution.dll" /&gt;&#xD;
   &lt;Assembly Path="C:\Users\MaciejGrzyb\.nuget\packages\nunit\3.13.3\lib\netstandard2.0\nunit.framework.dll" /&gt;&#xD;
+  &lt;Assembly Path="C:\Users\MaciejGrzyb\.nuget\packages\microsoft.azure.webjobs.extensions.openapi.core\1.5.1\lib\netstandard2.0\Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.dll" /&gt;&#xD;
 &lt;/AssemblyExplorer&gt;</s:String>
 	<s:String x:Key="/Default/Environment/Hierarchy/Build/BuildTool/CustomBuildToolPath/@EntryValue">C:\Program Files\dotnet\sdk\6.0.201\MSBuild.dll</s:String>
 	<s:Int64 x:Key="/Default/Environment/Hierarchy/Build/BuildTool/MsbuildVersion/@EntryValue">4294967293</s:Int64>

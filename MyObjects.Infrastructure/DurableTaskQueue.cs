@@ -17,12 +17,12 @@ internal class DurableTaskQueueFactory : IDurableTaskQueueFactory
         this.session = session;
     }
 
-    public IDurableTaskQueue<T> Create<T>()
+    IDurableTaskQueue<T> IDurableTaskQueueFactory.Create<T>()
     {
         return new DurableTaskQueue<T>(this.session, this.innerQueue);
     }
 
-    public bool TryDequeue(out (Reference<DurableTask>, Func<IComponentContext, Task>) task)
+    public bool TryDequeueFromQueue(out (Reference<DurableTask>, Func<IComponentContext, Task>) task)
     {
         return this.innerQueue.TryDequeue(out task);
     }

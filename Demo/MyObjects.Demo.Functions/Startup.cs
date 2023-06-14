@@ -35,7 +35,7 @@ public class Startup : FunctionsStartup
         });
         
         builder.AddGraphQLFunction(apiRoute: "/graphql")
-            .AddType<ProductCategoryType>()
+            .AddType<ProductCategoryProjectionType>()
             .AddQueryType<GraphQLQueryType>()
             .AddMutationType<GraphQLMutation>(descriptor => descriptor.Name("Mutation"))
             .AddProjections()
@@ -47,7 +47,7 @@ public class Startup : FunctionsStartup
         // this is optional and will bind IConfiguration with appsettings.json in
         // the container, like it is usually done in regular dotnet console and
         // web applications.
-        // builder.UseAppSettings();
+        builder.UseAppSettings();
     }
 
     private IContainer ConfigureContainer(ContainerBuilder builder)

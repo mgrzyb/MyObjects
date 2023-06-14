@@ -1,20 +1,29 @@
 using Autofac;
+using MyObjects.NHibernate;
 
 namespace MyObjects.Testing.NHibernate;
 
 public class NHibernateTestCodeRunner : ITestCodeRunner<global::NHibernate.ISession>
 {
+    public Task Run(ILifetimeScope container, Func<IReadonlySession<global::NHibernate.ISession>, Task> a)
+    {
+        return a(container.Resolve<IReadonlySession<global::NHibernate.ISession>>());
+    }
+
     public Task<K> Run<K>(ILifetimeScope container, Func<IReadonlySession<global::NHibernate.ISession>, Task<K>> a)
     {
         return a(container.Resolve<IReadonlySession<global::NHibernate.ISession>>());
     }
 
-    public async Task<K> Run<K>(ILifetimeScope container, Func<ISession<global::NHibernate.ISession>, Task<K>> a)
+    public Task Run(ILifetimeScope container, Func<ISession<global::NHibernate.ISession>, Task> a)
     {
-        var s = container.Resolve<global::NHibernate.ISession>();
-        using var t = s.BeginTransaction();
-        var result = await a(container.Resolve<ISession<global::NHibernate.ISession>>());
-        await t.CommitAsync();
-        return result;
+        var transactionRunner = container.Resolve<ITransactionRunner>();
+        return transactionRunner.RunInTransaction(() => a(container.Resolve<ISession<global::NHibernate.ISession>>()));
     }
+    
+    public Task<K> Run<K>(ILifetimeScope container, Func<ISession<global::NHibernate.ISession>, Task<K>> a)
+    {
+        var transactionRunner = container.Resolve<ITransactionRunner>();
+        return transactionRunner.RunInTransaction(() => a(container.Resolve<ISession<global::NHibernate.ISession>>()));
+    }    
 }

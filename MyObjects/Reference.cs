@@ -15,13 +15,13 @@ namespace MyObjects
         private int id;
         public int Id
         {
-            get => this.entity != null ? this.entity.Id : this.id;
-            private set { this.id = value; }
+            get => this.Entity != null ? this.Entity.Id : this.id;
+            private init { this.id = value; }
         }
         
-        public Type EntityType => typeof(TEntity);
+        public Type EntityType => this.Entity != null ? this.Entity.GetEntityType() : typeof(TEntity);
 
-        private readonly TEntity? entity;
+        protected readonly TEntity? Entity;
 
         // To make ToReference() working
         protected Reference()
@@ -36,7 +36,7 @@ namespace MyObjects
 
         public Reference(TEntity entity)
         {
-            this.entity = entity;
+            this.Entity = entity;
         }
 
         public override int GetHashCode()
@@ -46,8 +46,8 @@ namespace MyObjects
 
         public override string ToString()
         {
-            if (this.entity != null)
-                return $"[{this.entity.ToString()}]";
+            if (this.Entity != null)
+                return $"[{this.Entity.ToString()}]";
             
             return $"[{EntityType.Name}:{this.Id}]";
         }
@@ -76,11 +76,40 @@ namespace MyObjects
         {
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
-            if (obj.GetType() != this.GetType()) return false;
-            return Equals((Reference<TEntity>) obj);
+            
+            if (obj is IReference other)
+            {
+                if (other.EntityType.IsAssignableFrom(this.EntityType) || this.EntityType.IsAssignableFrom(other.EntityType))
+                    return this.Id == other.Id;
+            }
+
+            return false;
         }
 
         public static Expression<Func<TEntity, Reference<TEntity>>> FromEntity = (entity) =>
             new Reference<TEntity> {Id = entity.Id};
+
+        public VersionedReference<TEntity> WithVersion(int version)
+        {
+            return this.Entity != null ? new VersionedReference<TEntity>(this.Entity) : new VersionedReference<TEntity>(this.id, version);
+        }
+    }
+
+    public class VersionedReference<TEntity> : Reference<TEntity> where TEntity : IEntity
+    {
+        private readonly int version;
+        public int Version => this.Entity != null ? this.Entity.Version : this.version;
+        
+        public Reference<TEntity> WithoutVersion => this.Entity != null ? new Reference<TEntity>(this.Entity) : new Reference<TEntity>(this.Id);
+
+        public VersionedReference(TEntity entity) : base(entity)
+        {
+        }
+        
+        public VersionedReference(int id, int version) : base(id)
+        {
+            this.version = version;
+        }
+
     }
 }

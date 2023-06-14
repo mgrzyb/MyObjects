@@ -3,29 +3,26 @@ using System.Threading;
 using HotChocolate.Types;
 using Microsoft.Extensions.DependencyInjection;
 using MyObjects.Demo.Functions.Model;
-using NHibernate.Collection;
-using NHibernate.Linq;
+using MyObjects.NHibernate;
 
 namespace MyObjects.Demo.Functions.GraphQL.ProductCategories;
 
-public class ProductCategoryType : ObjectType<ProductCategoryDto>
+public class ProductCategoryProjectionType : ObjectType<ProductCategoryProjectionDto>
 {
-    private static SemaphoreSlim sem = new SemaphoreSlim(1, 1);
+    private static readonly SemaphoreSlim sem = new SemaphoreSlim(1, 1);
     
-    protected override void Configure(IObjectTypeDescriptor<ProductCategoryDto> descriptor)
+    protected override void Configure(IObjectTypeDescriptor<ProductCategoryProjectionDto> descriptor)
     {
         descriptor.Field(dto => dto.Name).Resolve(context => context.Parent<Demo.Model.Products.ProductCategory>().Name);
-        descriptor.Field(dto => dto.Children).Type<ListType<ProductCategoryType>>().Resolve(async context =>
+        descriptor.Field(dto => dto.Children).Type<ListType<ProductCategoryProjectionType>>().Resolve(async context =>
         {
             var session = context.Services.GetService<IReadonlySession<global::NHibernate.ISession>>();
 
+            // Resolvers are run parallel, Session is not thread save  
             await sem.WaitAsync();
             try
             {
-                var children = context.Parent<Demo.Model.Products.ProductCategory>().Children;
-                if (children is IPersistentCollection c)
-                    await session.Advanced.GetSessionImplementation().InitializeCollectionAsync(c, false, CancellationToken.None);
-                return children;
+                return await context.Parent<Demo.Model.Products.ProductCategory>().Children.Initialized();
             }
             finally
             {

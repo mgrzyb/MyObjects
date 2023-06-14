@@ -32,7 +32,8 @@ public abstract class IntegrationTestFixtureBase<TAdvancedSession> : ContainerBa
                 .EmitDomainEvents()
                 .RunInTransaction()
                 .RunDurableTasks()
-                .RunInLifetimeScope())
+                .RunInLifetimeScope()
+                .Retry())
             .AddDomainEventHandlers();
 
         return builder.Build();

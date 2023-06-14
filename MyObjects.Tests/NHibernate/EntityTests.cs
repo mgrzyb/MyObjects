@@ -38,8 +38,22 @@ namespace MyObjects.Tests
             });
         }
 
+        [Test]
+        public async Task When_entity_update_causes_version_mismatch_ConcurrencyExceptionIsThrown()
+        {
+            var aRef = await Given(session => session.Save(new A()));
+
+            Assert.ThrowsAsync<ConcurrencyViolationException>(async () => await When(async s =>
+            {
+                var a = await s.Resolve(aRef);
+                await s.Advanced.CreateSQLQuery("UPDATE A SET Version = 10").ExecuteUpdateAsync();
+                a.Foo = "Bar";
+            }));
+        }
+
         public class A : AggregateRoot
         {
+            public virtual string Foo { get; set; }
         }
     }
 }

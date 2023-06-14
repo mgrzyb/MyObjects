@@ -46,7 +46,7 @@ public class CommandHandlerRegistration
     {
         this.Builder.RegisterGeneric(typeof(LifetimeScopeCommandHandlerAdapter<,>)).AsImplementedInterfaces();
 
-        return this.Complete();
+        return this.Complete(true);
     }
     
     public RequestHandlerRegistration Retry()

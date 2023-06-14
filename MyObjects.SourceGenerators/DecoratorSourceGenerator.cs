@@ -23,9 +23,14 @@ public class DecoratorSourceGenerator : ISourceGenerator
     {
         var syntaxReceiver = context.SyntaxReceiver as PartialDecoratorReceiver;
 
-        var userClass = syntaxReceiver?.ClassDeclarationSyntax;
-        if (userClass is null)
-            return;
+        foreach (var syntax in syntaxReceiver.DeclarationSyntax)
+        {
+            this.Generate(context, syntax);
+        }
+        
+    }
+    private void Generate(GeneratorExecutionContext context, ClassDeclarationSyntax userClass)
+    {
 
         var userClassModel = context.Compilation.GetSemanticModel(userClass.SyntaxTree);
         var userClassSymbol = ModelExtensions.GetDeclaredSymbol(userClassModel, userClass) as ITypeSymbol;
@@ -56,7 +61,7 @@ public class DecoratorSourceGenerator : ISourceGenerator
 
         // add the generated implementation to the compilation
         SourceText sourceText = SourceText.From($@"
-{GetUsings(methodsToImplement)}
+{this.GetUsings(methodsToImplement)}
 namespace {string.Join(".", userClassSymbol.ContainingNamespace.ConstituentNamespaces)};
 public partial class {userClassSymbol.GetName()}
 {{
@@ -153,8 +158,8 @@ public static class ITypeSymbolExtensions
 
 public class PartialDecoratorReceiver : ISyntaxReceiver
 {
-    public ClassDeclarationSyntax? ClassDeclarationSyntax { get; private set; }
-    
+    public List<ClassDeclarationSyntax> DeclarationSyntax { get; private set; } = new List<ClassDeclarationSyntax>();
+
     public void OnVisitSyntaxNode(SyntaxNode syntaxNode)
     {
         if (syntaxNode is ClassDeclarationSyntax classDeclarationSyntax)
@@ -163,7 +168,7 @@ public class PartialDecoratorReceiver : ISyntaxReceiver
             {
                 if (classDeclarationSyntax.Identifier.Text.EndsWith("Decorator"))
                 {
-                    this.ClassDeclarationSyntax = classDeclarationSyntax;
+                    this.DeclarationSyntax.Add(classDeclarationSyntax);
                 }
             }
         }

@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using MyObjects.Infrastructure;
 
 namespace MyObjects
 {
@@ -34,6 +37,13 @@ namespace MyObjects
             {
                 this.events.Enqueue(item);
             }
+        }
+
+        public async virtual Task Update(Func<Task> update)
+        {
+            await update();
+            
+            this.Publish(AggregateUpdated.From(this.GetEntityType(), this));
         }
     }
 }

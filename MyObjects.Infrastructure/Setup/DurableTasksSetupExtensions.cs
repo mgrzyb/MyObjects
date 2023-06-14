@@ -15,7 +15,7 @@ public static class DurableTasksSetupExtensions
         builder.RegisterGeneric((c, type) =>
         {
             var f = c.Resolve<IDurableTaskQueueFactory>();
-            return f.GetType().GetMethod(nameof(IDurableTaskQueueFactory.Create)).MakeGenericMethod(type)
+            return typeof(IDurableTaskQueueFactory).GetMethod(nameof(IDurableTaskQueueFactory.Create)).MakeGenericMethod(type)
                 .Invoke(f, new object[] { });
         }).As(typeof(IDurableTaskQueue<>));
         builder.RegisterType<RunDurableTask.Handler>().AsImplementedInterfaces();

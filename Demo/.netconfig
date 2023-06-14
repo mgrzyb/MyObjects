@@ -1,0 +1,6 @@
+[nh]
+    migrationsNamespace = "MyObjects.Demo.Migrations"
+    migrationsDirectory = "Migrations"
+    connectionString = "Data Source=(LocalDb)\\MSSQLLocalDB;Initial Catalog=MyObjectsDemo;Integrated Security=True;Connect Timeout=30"
+    modelProjectPath = "./MyObjects.Demo"
+    migrationsProjectPath = "./MyObjects.Demo.Functions/MyObjects.Demo.Functions.csproj"

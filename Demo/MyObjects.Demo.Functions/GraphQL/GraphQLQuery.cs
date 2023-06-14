@@ -4,7 +4,7 @@ using HotChocolate;
 using HotChocolate.Data;
 using HotChocolate.Types;
 using Microsoft.Extensions.DependencyInjection;
-using MyObjects.Demo.Functions.GraphQL.ProductCategory;
+using MyObjects.Demo.Functions.GraphQL.ProductCategories;
 using MyObjects.Demo.Functions.Model;
 using MyObjects.Demo.Model.Orders;
 using MyObjects.Demo.Model.Products;
@@ -15,7 +15,7 @@ public class GraphQLQuery
 {
     [UseProjection]
     [UseFiltering]
-    public IQueryable<ProductDto> GetProducts([Service]ProjectedQuery<Product, ProductDto> query) => query.Run();
+    public IQueryable<ProductProjectionDto> GetProducts([Service]ProjectedQuery<Product, ProductProjectionDto> query) => query.Run();
     
     [UseProjection]
     [UseFiltering]

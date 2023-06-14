@@ -4,7 +4,7 @@ namespace MyObjects.Demo.Model.Products;
 
 public partial class Product
 {
-    private readonly ICollection<ProductCategory> categories = new List<ProductCategory>();
+    private readonly ISet<ProductCategory> categories = new HashSet<ProductCategory>();
     
     protected Product()
     {

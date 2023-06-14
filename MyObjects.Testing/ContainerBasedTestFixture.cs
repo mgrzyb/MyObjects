@@ -56,7 +56,7 @@ public class ContainerBasedTestFixture
         return this;
     }
 
-    protected Task<K> RunInLifetimeScope<K>(Func<ILifetimeScope, Task<K>> given)
+    protected Task RunInLifetimeScope(Func<ILifetimeScope, Task> given)
     {
         using (var scope = this.container.Value.BeginLifetimeScope(ConfigureActionScope))
         {
@@ -64,6 +64,14 @@ public class ContainerBasedTestFixture
         }
     }
 
+    protected Task<K> RunInLifetimeScope<K>(Func<ILifetimeScope, Task<K>> given)
+    {
+        using (var scope = this.container.Value.BeginLifetimeScope(ConfigureActionScope))
+        {
+            return given(scope);
+        }
+    }
+    
     private void ConfigureActionScope(ContainerBuilder builder)
     {
         foreach (var action in this.scopeConfigActions)

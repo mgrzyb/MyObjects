@@ -11,4 +11,5 @@ namespace MyObjects
 
         public IReference Reference { get; }
     }
+
 }

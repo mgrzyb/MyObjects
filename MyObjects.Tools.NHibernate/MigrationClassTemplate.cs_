@@ -1,0 +1,19 @@
+﻿using System;
+using FluentMigrator;
+
+namespace {$Namespace}
+{
+    [Migration({$Name})]
+    public class Migration_{$Name}: Migration
+    {
+        public override void Up()
+        {
+            this.Execute.Script("{$Directory}/{$Name}.sql");
+        }
+		
+        public override void Down()
+        {
+            throw new NotImplementedException();
+        }
+    }
+}

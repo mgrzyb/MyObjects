@@ -10,14 +10,14 @@ public class SystemTextReferenceConverter : JsonConverterFactory
         return typeToConvert.IsGenericType && typeToConvert.GetGenericTypeDefinition() == typeof(Reference<>);
     }
 
-    public override System.Text.Json.Serialization.JsonConverter CreateConverter(Type typeToConvert, JsonSerializerOptions options)
+    public override JsonConverter? CreateConverter(Type typeToConvert, JsonSerializerOptions options)
     {
         var entityType = typeToConvert.GetGenericArguments()[0];
-        return (System.Text.Json.Serialization.JsonConverter) Activator.CreateInstance(typeof(ReferenceConverter<>).MakeGenericType(entityType));
+        return (JsonConverter) Activator.CreateInstance(typeof(ReferenceConverter<>).MakeGenericType(entityType));
     }
 }
 
-public class ReferenceConverter<T> : System.Text.Json.Serialization.JsonConverter<Reference<T>> where T : Entity
+public class ReferenceConverter<T> : JsonConverter<Reference<T>> where T : Entity
 {
     public override Reference<T> Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {

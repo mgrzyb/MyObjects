@@ -20,7 +20,7 @@ namespace MyObjects
 
     public interface ISession : IReadonlySession
     {
-        Task<Reference<T>> Save<T>(T entity) where T : AggregateRoot;
+        Task<VersionedReference<T>> Save<T>(T entity) where T : AggregateRoot;
         Task Delete<T>(T entity) where T : AggregateRoot;
     }
 

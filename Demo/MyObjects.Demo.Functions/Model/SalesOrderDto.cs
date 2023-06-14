@@ -7,6 +7,10 @@ using MyObjects.Demo.Model.Products;
 
 namespace MyObjects.Demo.Functions.Model;
 
+public partial class ProductFooDto : IDtoFor<Product>
+{
+}
+
 public class SalesOrderDataDto<TLine>
 {
     public IEnumerable<TLine> Lines { get; set; }

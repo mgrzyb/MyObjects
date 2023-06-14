@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
@@ -11,116 +10,65 @@ using NHibernate.Linq;
 
 namespace MyObjects.Demo.Functions.Api;
 
-[Route("api")]
-public partial class ProductFunctions : FunctionsBase<IActionResult>
+[Route("api")][OpenApi("Product")]
+public partial class ProductFunctions : HttpFunctionsBase
 {
     private readonly Mapper mapper;
-    private readonly ProjectedQuery<Product, ProductDto> productQuery;
+    private readonly ProjectedQuery<Product, ProductProjectionDto> productQuery;
     
-    public ProductFunctions(IDependencies dependencies, ProjectedQuery<Product, ProductDto> productQuery, Mapper mapper) : base(dependencies)
+    public ProductFunctions(IDependencies dependencies, ProjectedQuery<Product, ProductProjectionDto> productQuery, Mapper mapper) : base(dependencies)
     {
         this.productQuery = productQuery;
         this.mapper = mapper;
     }
-
-    [HttpGet][Route("products")]
-    public async Task<IActionResult> GetProducts()
-    {
-        return new OkObjectResult(await this.productQuery.Run().ToListAsync());
-    }
     
+    /// <summary>
+    /// Returns all products
+    /// </summary>
+    /// <remarks>
+    /// Remarks Foo
+    /// </remarks>
+    /// <param name="skip">Number of products to skip (optional)</param>
+    /// <param name="take">Number of products to return (optional, defaults to 1000)</param>
+    /// <returns>List of products Bar</returns>
+    [HttpGet][Route("products")]
+    public async Task<HttpOk<IEnumerable<ProductProjectionDto>>> GetProducts(int? skip, int? take)
+    {
+        var products = await this.productQuery.Run(skip, take).ToListAsync();
+        return new HttpOk<IEnumerable<ProductProjectionDto>>(products);
+    }
+
     [HttpPost][Route("products")]
-    public async Task<IActionResult> CreateProduct(CreateProductDto body)
+    public async Task<HttpCreated> CreateProduct(CreateProductDto body)
     {
         var productRef = await this.Mediator.Send(this.mapper.Map<CreateProduct>(body));
-        return new CreatedResult($"api/products/{productRef.Id}", null);
+        return new HttpCreated($"api/products/{productRef.Id}");
+    }
+    
+    [HttpGet][Route("products/{id}")]
+    public async Task<HttpOk<ProductDto>> GetProduct(Reference<Product> id)
+    {
+        return HttpOk.WithValue(this.mapper.Map<ProductDto>(await this.Session.Resolve(id)));
     }
 
-    [HttpPost][Route("frisco-products")]
-    public async Task<IActionResult> ImportFriscoProducts(IEnumerable<FriscoProductWrapperDto> body)
+    [HttpPut][Route("products/{id},{version}")]
+    public async Task<OneOf<HttpConflict, HttpOk<ProductDto>>> UpdateProduct(Reference<Product> id, int version, UpdateProductDto body)
     {
-        var roots = await GetProductCategories(body);
-        await this.Mediator.Send(new CreateProductCategoryHierarchies(roots));
-
-        var externalIds = body.Select(p => p.Product.Id).ToArray();
-        var existingProducts = this.Session.Query<Product>()
-            .Where(p => externalIds.Contains(p.ExternalId))
-            .Select(p => p.ExternalId).ToHashSet();
-
-        var rootCategoryExternalIds = body.SelectMany(p =>
-            p.Product.Categories.Where(c =>
-                p.Product.Categories.Any(child => child.ParentId == c.CategoryId) == false))
-            .Select(c => c.CategoryId)
-            .Distinct()
-            .ToArray();
-
-        var categories = await this.Session.Query<ProductCategory>()
-            .Where(c => rootCategoryExternalIds.Contains(c.ExternalId))
-            .Select(c => new {c.ExternalId, c.Id})
-            .ToListAsync();
-        
-        foreach (var p in body.Select(p => p.Product).Where(p => existingProducts.Contains(p.Id) == false))
-        {
-            var categoryReferences = p.Categories.Join(categories, 
-                c => c.CategoryId, 
-                c=>c.ExternalId, 
-                (_,c) => new Reference<ProductCategory>(c.Id));
-            
-            await this.Mediator.Send(new CreateProduct(p.Name.Pl, categoryReferences)
-            {
-                ExternalId = p.Id,
-            });
-        }
-        
-        return new OkResult();
+        var command = this.mapper.Map(body, new UpdateProduct(id.WithVersion(version)));
+        await this.Mediator.Send(command);
+        return HttpOk.WithValue(this.mapper.Map<ProductDto>(await this.Session.Resolve(id)));
     }
-
-    private async Task<IEnumerable<Foo>> GetProductCategories(IEnumerable<FriscoProductWrapperDto> body)
+    
+    [HttpPatch][Route("products/{id}")]
+    public async Task<OneOf<HttpOk<ProductDto>, HttpConflict>> PatchProduct(Reference<Product> id, UpdateProductDto body)
     {
-        var categories = this.Session.Query<ProductCategory>().ToDictionary(c => c.ExternalId, c => c);
-        var friscoCategories = body.SelectMany(p => p.Product.Categories).DistinctBy(c => c.CategoryId);
-
-        var roots = new HashSet<Foo>();
-        var d = new Dictionary<int, Foo>();
-
-        foreach (var f in friscoCategories)
-        {
-            var foo = d.GetValueOrDefault(f.CategoryId) ?? new Foo
-            {
-                ExternalId = f.CategoryId,
-                SelfRef = categories.GetValueOrDefault(f.CategoryId)?.GetReference(),
-            };
-            d[f.CategoryId] = foo;
-
-            foo.Name = f.Name.Pl;
-
-            if (f.ParentId.HasValue)
-            {
-                roots.Remove(foo);
-                foo.ParentRef = categories.GetValueOrDefault(f.ParentId.Value)?.GetReference();
-
-                if (d.TryGetValue(f.ParentId.Value, out var parent))
-                {
-                    parent.Children.Add(foo);
-                }
-                else
-                {
-                    var p = new Foo
-                    {
-                        Name = "???",
-                        ExternalId = f.ParentId.Value,
-                        SelfRef = categories.GetValueOrDefault(f.ParentId.Value)?.GetReference()
-                    };
-                    d.Add(f.ParentId.Value, p);
-                    roots.Add(p);
-                }
-            }
-            else
-            {
-                roots.Add(foo);
-            }
-        }
-
-        return roots;
+        var product = await this.Session.Resolve(id);
+        
+        var command = this.mapper.Map(body, new UpdateProduct(product.GetVersionedReference()));
+        await this.Mediator.Send(command);
+        
+        this.Session.Clear();
+        
+        return HttpOk.WithValue(this.mapper.Map<ProductDto>(await this.Session.Resolve(id)));
     }
 }
