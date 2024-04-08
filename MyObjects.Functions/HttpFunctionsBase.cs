@@ -129,6 +129,11 @@ public class HttpFunctionsBase : FunctionsBase<IActionResult>
         return this.Pipeline.Run(f);
     }
 
+    protected IActionResult CreateActionResult(IActionResult result)
+    {
+        return result;
+    }
+    
     protected IActionResult CreateActionResult(IHttpFunctionResult result)
     {
         return result.ToActionResult();

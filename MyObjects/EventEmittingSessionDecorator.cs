@@ -11,7 +11,7 @@ public partial class EventEmittingSessionDecorator : ISession
         this.session = session;
     }
 
-    public Task<VersionedReference<T>> Save<T>(T entity) where T : AggregateRoot
+    public Task<Reference<T>> Save<T>(T entity) where T : AggregateRoot
     {
         var save = this.session.Save(entity);
         entity.Publish(new AggregateCreated<T>(entity));

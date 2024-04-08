@@ -7,8 +7,10 @@ namespace MyObjects
     public interface IReadonlySession
     {
         Task<T> Resolve<T>(Reference<T> entityRef) where T : IEntity;
+        Task<T> Resolve<T>(VersionedReference<T> entityRef) where T : IEntity;
         Task<IReadOnlyList<T>> ResolveMany<T>(IEnumerable<Reference<T>> entityRefs) where T : IEntity;
         Task<T?> TryResolve<T>(Reference<T> entityRef) where T : IEntity;
+        Task<T?> TryResolve<T>(VersionedReference<T> entityRef) where T : IEntity;
         IQueryable<T> Query<T>();
         void Clear();
     }
@@ -20,7 +22,7 @@ namespace MyObjects
 
     public interface ISession : IReadonlySession
     {
-        Task<VersionedReference<T>> Save<T>(T entity) where T : AggregateRoot;
+        Task<Reference<T>> Save<T>(T entity) where T : AggregateRoot;
         Task Delete<T>(T entity) where T : AggregateRoot;
     }
 

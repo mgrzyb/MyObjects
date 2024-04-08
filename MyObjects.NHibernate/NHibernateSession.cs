@@ -18,10 +18,10 @@ namespace MyObjects.NHibernate
             this.session = session;
         }
 
-        public async Task<VersionedReference<T>> Save<T>(T entity) where T : AggregateRoot
+        public async Task<Reference<T>> Save<T>(T entity) where T : AggregateRoot
         {
             await this.session.SaveAsync(entity);
-            return entity.GetVersionedReference();
+            return entity.GetReference();
         }
 
         public Task Delete<T>(T entity) where T : AggregateRoot
@@ -34,12 +34,14 @@ namespace MyObjects.NHibernate
             var entity = await this.session.GetAsync<T>(entityRef.Id);
             if (entity == null)
                 throw new InvalidReferenceException(entityRef);
-            if (entityRef is VersionedReference<T> versionedRef)
-            {
-                if (entity.Version != versionedRef.Version)
-                    throw new ConcurrencyViolationException(entity);
-            }
-
+            return entity;
+        }
+        
+        public async Task<T> Resolve<T>(VersionedReference<T> entityRef) where T : IEntity
+        {
+            var entity = await this.Resolve(entityRef.WithoutVersion);
+            if (entity.Version != entityRef.Version)
+                throw new ConcurrencyViolationException(entity);
             return entity;
         }
 
@@ -59,6 +61,14 @@ namespace MyObjects.NHibernate
         public async Task<T?> TryResolve<T>(Reference<T> entityRef) where T : IEntity
         {
             return await this.session.GetAsync<T>(entityRef.Id);
+        }
+        
+        public async Task<T?> TryResolve<T>(VersionedReference<T> entityRef) where T : IEntity
+        {
+            var entity = await this.TryResolve(entityRef.WithoutVersion);
+            if (entity?.Version != entityRef.Version)
+                return default(T);
+            return entity;
         }
 
         public IQueryable<T> Query<T>()

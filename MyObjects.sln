@@ -36,6 +36,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tools", "Tools", "{DAAA59C6
 		Demo\.config\dotnet-tools.json = Demo\.config\dotnet-tools.json
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyObjects.Identity", "MyObjects.Identity\MyObjects.Identity.csproj", "{80DC52E7-A5A0-43A9-9762-E2BD36919414}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -90,6 +92,10 @@ Global
 		{B7D28E0A-211E-48B9-900D-E80A4FFC13A8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B7D28E0A-211E-48B9-900D-E80A4FFC13A8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B7D28E0A-211E-48B9-900D-E80A4FFC13A8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{80DC52E7-A5A0-43A9-9762-E2BD36919414}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{80DC52E7-A5A0-43A9-9762-E2BD36919414}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{80DC52E7-A5A0-43A9-9762-E2BD36919414}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{80DC52E7-A5A0-43A9-9762-E2BD36919414}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{6C311BD4-C6ED-41A1-BBF0-6A1DF45237D5} = {BCB9036F-B426-4EC6-BF6D-6DA1A33E6FEE}
