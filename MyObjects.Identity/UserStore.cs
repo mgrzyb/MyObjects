@@ -3,14 +3,13 @@ using Microsoft.AspNetCore.Identity;
 
 namespace MyObjects.Identity;
 
-class UserStore<T> : IUserStore<T> where T : AggregateRoot, IIdentityUser
+public abstract class UserStore<T> : IUserStore<T> where T : AggregateRoot, IIdentityUser
 {
-    private readonly ISession session;
-    private Expression<Func<T,bool>> normalizedUsernameAccessor;
+    protected readonly ISession Session;
 
-    public UserStore(ISession session)
+    protected UserStore(ISession session)
     {
-        this.session = session;
+        this.Session = session;
     }
     
     public void Dispose()
@@ -46,7 +45,7 @@ class UserStore<T> : IUserStore<T> where T : AggregateRoot, IIdentityUser
 
     public async Task<IdentityResult> CreateAsync(T user, CancellationToken cancellationToken)
     {
-        await this.session.Save(user);
+        await this.Session.Save(user);
         return IdentityResult.Success;
     }
 
@@ -57,17 +56,16 @@ class UserStore<T> : IUserStore<T> where T : AggregateRoot, IIdentityUser
 
     public async Task<IdentityResult> DeleteAsync(T user, CancellationToken cancellationToken)
     {
-        await this.session.Delete(user);
+        await this.Session.Delete(user);
         return IdentityResult.Success;
     }
 
-    public Task<T?> FindByIdAsync(string userId, CancellationToken cancellationToken)
+    public Task<T> FindByIdAsync(string userId, CancellationToken cancellationToken)
     {
-        return this.session.TryResolve(new Reference<T>(int.Parse(userId)));
+        #pragma warning disable CS8619 // Nullability of reference types in value doesn't match target type.
+        return this.Session.TryResolve(new Reference<T>(int.Parse(userId)));
+        #pragma warning restore CS8619 // Nullability of reference types in value doesn't match target type.
     }
 
-    public async Task<T?> FindByNameAsync(string normalizedUserName, CancellationToken cancellationToken)
-    {
-        return await this.session.Query<T>().Where(u => u.NormalizedUserName == normalizedUserName).SingleOrDefaultAsync();
-    }
+    public abstract Task<T> FindByNameAsync(string normalizedUserName, CancellationToken cancellationToken);
 }

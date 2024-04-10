@@ -1,13 +1,13 @@
 namespace MyObjects.Functions;
 
-public interface IFunctionPipeline<TResult>
+public interface IFunctionPipeline<TArg, TResult>
 {
-    Task<TResult> Run(Func<Task<TResult>> action);
+    Task<TResult> Run(TArg arg, Func<Task<TResult>> action);
 }
 
-class FunctionPipeline<TResult> : IFunctionPipeline<TResult>
+class FunctionPipeline<TArg, TResult> : IFunctionPipeline<TArg, TResult>
 {
-    public Task<TResult> Run(Func<Task<TResult>> action)
+    public Task<TResult> Run(TArg arg, Func<Task<TResult>> action)
     {
         return action();
     }

@@ -11,7 +11,7 @@ using NHibernate.Linq;
 namespace MyObjects.Demo.Functions.Api;
 
 [Route("api")]
-public partial class FriscoProductFunctions : FunctionsBase<IActionResult>
+public partial class FriscoProductFunctions : HttpFunctionsBase
 {
     public FriscoProductFunctions(IDependencies dependencies) : base(dependencies)
     {

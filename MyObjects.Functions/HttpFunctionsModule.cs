@@ -2,6 +2,7 @@ using System.Reflection;
 using Autofac;
 using Autofac.Extensions.DependencyInjection.AzureFunctions;
 using Autofac.Extras.AggregateService;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Module = Autofac.Module;
 
@@ -18,7 +19,7 @@ public class HttpFunctionsModule : Module
 
     protected override void Load(ContainerBuilder builder)
     {
-        builder.RegisterAggregateService<FunctionsBase<IActionResult>.IDependencies>();
+        builder.RegisterAggregateService<FunctionsBase<HttpRequest, IActionResult>.IDependencies>();
 
         builder
             .RegisterAssemblyTypes(this.functionsAssembly)
@@ -26,8 +27,10 @@ public class HttpFunctionsModule : Module
             .AsSelf() // Azure Functions core code resolves a function class by itself.
             .InstancePerTriggerRequest(); // This will scope nested dependencies to each function execution
 
-        builder.RegisterType<FunctionPipeline<IActionResult>>().AsImplementedInterfaces();
-        builder.RegisterDecorator<ConvertInvalidReferenceToNotFoundDecorator, IFunctionPipeline<IActionResult>>();
-        builder.RegisterDecorator<ConvertConcurrencyViolationToConflictDecorator, IFunctionPipeline<IActionResult>>();
+        builder.RegisterType<FunctionPipeline<HttpRequest, IActionResult>>().AsImplementedInterfaces();
+        builder.RegisterDecorator<ConvertInvalidReferenceToNotFoundDecorator<HttpRequest>, IFunctionPipeline<HttpRequest, IActionResult>>();
+        builder.RegisterDecorator<ConvertConcurrencyViolationToConflictDecorator<HttpRequest>, IFunctionPipeline<HttpRequest, IActionResult>>();
+
+        builder.RegisterType<PrincipalArgumentResolver>().AsImplementedInterfaces();
     }
 }

@@ -12,8 +12,10 @@ using MyObjects.Demo.Functions.GraphQL;
 using MyObjects.Demo.Functions.GraphQL.ProductCategories;
 using MyObjects.Demo.Functions.Infrastructure;
 using MyObjects.Demo.Functions.Model;
+using MyObjects.Demo.Model;
 using MyObjects.Demo.Model.Products;
 using MyObjects.Functions;
+using MyObjects.Identity;
 using MyObjects.Infrastructure;
 using MyObjects.Infrastructure.Setup;
 using MyObjects.NHibernate;
@@ -97,6 +99,7 @@ public class Startup : FunctionsStartup
         
         builder.RegisterType<AutoDomainEventMessageMapper<AggregateCreated<Product>>>().AsImplementedInterfaces();
         
+        builder.RegisterType<UserStore>().AsImplementedInterfaces().AsSelf().As(typeof(UserStore<User>));
         return builder.Build();
     }
 

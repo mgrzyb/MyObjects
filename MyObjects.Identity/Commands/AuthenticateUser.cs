@@ -24,7 +24,7 @@ public partial class AuthenticateUser<TUser> : Command<bool> where TUser : class
 
         public override Task<bool> Handle(AuthenticateUser<TUser> command, CancellationToken cancellationToken)
         {
-            var result = this.signInManager.PasswordSignInAsync(command.UserName, command.Password, false, false, cancellationToken);
+            var result = this.signInManager.PasswordSignInAsync(command.UserName, command.Password, false, false);
             return Task.FromResult(result.Result.Succeeded);
         }
     }

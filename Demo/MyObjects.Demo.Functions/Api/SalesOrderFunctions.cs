@@ -12,7 +12,7 @@ using NHibernate.Linq;
 namespace MyObjects.Demo.Functions.Api;
 
 [Route("api")]
-public partial class SalesOrderFunctions : FunctionsBase<IActionResult>
+public partial class SalesOrderFunctions : HttpFunctionsBase
 {
     private readonly Mapper mapper;
     private readonly ProjectedQuery<SalesOrder, SalesOrderDto> salesOrderQuery;

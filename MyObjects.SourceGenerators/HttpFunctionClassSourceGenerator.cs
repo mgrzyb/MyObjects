@@ -44,7 +44,8 @@ internal enum FunctionParameterBindingKind
     Url,
     Body,
     Query,
-    PassThrough
+    PassThrough,
+    Resolved
 }
 
 [Generator]
@@ -144,7 +145,7 @@ public class HttpFunctionClassSourceGenerator : ISourceGenerator
                         Type = GetParameterType(p),
                         TargetType = p.Type,
                         Required = p.Type.Name != "Nullable",
-                        Description = parameterSummary.GetValueOrDefault(p.Name) ?? ""
+                        Description = parameterSummary.TryGetValue(p.Name, out var description) ? description : ""
                     }),
                     ReturnValues = rv,
                     TargetReturnType = e.Handler.ReturnType
@@ -172,7 +173,10 @@ public class HttpFunctionClassSourceGenerator : ISourceGenerator
                 return FunctionParameterBindingKind.PassThrough;
             if (route.Contains($"{{{p.Name}}}"))
                 return FunctionParameterBindingKind.Url;
-            return FunctionParameterBindingKind.Query;
+            if (new string[] { "String", "int32", "decimal" }.Contains(p.Type.Name))
+                return FunctionParameterBindingKind.Query;
+
+            return FunctionParameterBindingKind.Resolved;
         }
         
         string GetParameterType(IParameterSymbol p)
@@ -228,7 +232,7 @@ public class HttpFunctionClassSourceGenerator : ISourceGenerator
                     functionStatements.Add($"var {bodyParameter.Name} = JsonConvert.DeserializeObject<{bodyParameter.Type}>(await new StreamReader(req.Body).ReadToEndAsync(), JsonSerializerSettings);");
                 
                 functionStatements.Add($@"
-                    return await this.Run(async () => {{
+                    return await this.Run(req, async () => {{
                         var result = await this.{f.Name}(
                             {string.Join(", ", f.Parameters.Select(GetConvertedParameterValue))}
                         );
@@ -252,7 +256,8 @@ public class HttpFunctionClassSourceGenerator : ISourceGenerator
                         if (p.BindingKind == FunctionParameterBindingKind.Body) 
                         {
                             functionAttributes.Add($"[OpenApiRequestBody(\"application/json\", typeof({p.TargetType}))]");
-                        } else
+                        } 
+                        else if (p.BindingKind == FunctionParameterBindingKind.Url || p.BindingKind == FunctionParameterBindingKind.Query)
                         {
                             var parameterLocation = p.BindingKind == FunctionParameterBindingKind.Query ?
                                 "ParameterLocation.Query" : 
@@ -300,13 +305,16 @@ public class HttpFunctionClassSourceGenerator : ISourceGenerator
 
         string GetConvertedParameterValue(HttpFunctionParameter p)
         {
+            if (p.BindingKind == FunctionParameterBindingKind.Resolved)
+                return $"await this.ResolveParameterValue<{p.TargetType.GetFullName()}>(req, \"" + p.Name + "\")";
+
             var value = p.BindingKind == FunctionParameterBindingKind.Query ? 
                 $"req.Query[\"{p.Name}\"]" : 
                 p.Name;
 
             var targetType = (INamedTypeSymbol) p.TargetType;
 
-            if (p.BindingKind == FunctionParameterBindingKind.Query && p.TargetType.Name.ToLower() != "string")
+            if (p.BindingKind == FunctionParameterBindingKind.Query && targetType.Name.ToLower() != "string")
             {
                 switch (targetType.Name)
                 {
@@ -358,6 +366,11 @@ public class HttpFunctionClassSourceGenerator : ISourceGenerator
                     return new HttpFunctionReturnValue
                     {
                         Code = 409,
+                    };
+                case INamedTypeSymbol {Name: "HttpUnauthorized"} httpUnauthorized:
+                    return new HttpFunctionReturnValue
+                    {
+                        Code = 401,
                     };
                 default:
                     return new HttpFunctionReturnValue

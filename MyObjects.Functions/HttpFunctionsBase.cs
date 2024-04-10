@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MyObjects.Functions;
@@ -117,16 +118,23 @@ public class HttpConflict : IHttpFunctionResult
     }
 }
 
-public class HttpFunctionsBase : FunctionsBase<IActionResult>
+public class HttpUnauthorized : IHttpFunctionResult
 {
+    public IActionResult ToActionResult()
+    {
+        return new UnauthorizedResult();
+    }
+}
 
+public class HttpFunctionsBase : FunctionsBase<HttpRequest, IActionResult>
+{
     public HttpFunctionsBase(IDependencies dependencies) : base(dependencies)
     {
     }
 
-    protected Task<IActionResult> Run(Func<Task<IActionResult>> f)
+    protected Task<IActionResult> Run(HttpRequest req, Func<Task<IActionResult>> f)
     {
-        return this.Pipeline.Run(f);
+        return this.Pipeline.Run(req, f);
     }
 
     protected IActionResult CreateActionResult(IActionResult result)
@@ -147,5 +155,18 @@ public class HttpFunctionsBase : FunctionsBase<IActionResult>
     protected IActionResult CreateActionResult<T1, T2, T3>(OneOf<T1, T2, T3> result) where T1 : IHttpFunctionResult where T2 : IHttpFunctionResult where T3 : IHttpFunctionResult
     {
         return ((IHttpFunctionResult) result.Value).ToActionResult();
+    }
+
+    protected async Task<T> ResolveParameterValue<T>(HttpRequest req, string name)
+    {
+        foreach (var resolver in this.ArgumentResolvers)
+        {
+            var value = await resolver.TryResolve<T>(name, req);
+            if (!Equals(value, default(T)))
+            {
+                return value;
+            }
+        }
+        return default;
     }
 }

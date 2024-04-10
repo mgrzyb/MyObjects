@@ -9,6 +9,7 @@
     <ItemGroup>
       <ProjectReference Include="..\..\MyObjects.NHibernate\MyObjects.NHibernate.csproj" />
       <ProjectReference Include="..\..\MyObjects\MyObjects.csproj" />
+        <ProjectReference Include="..\..\MyObjects.Identity\MyObjects.Identity.csproj" />
     </ItemGroup>
 
     <ItemGroup>

@@ -7,7 +7,7 @@ using MyObjects.Functions;
 
 namespace MyObjects.Demo.Functions.Api;
 
-public partial class GraphQLFunctions : FunctionsBase<IActionResult>
+public partial class GraphQLFunctions : HttpFunctionsBase
 {
     private readonly IServiceProvider serviceProvider;
     private readonly IGraphQLRequestExecutor executor;
