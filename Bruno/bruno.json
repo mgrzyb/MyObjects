@@ -1,0 +1,9 @@
+{
+  "version": "1",
+  "name": "MyObjects",
+  "type": "collection",
+  "ignore": [
+    "node_modules",
+    ".git"
+  ]
+}

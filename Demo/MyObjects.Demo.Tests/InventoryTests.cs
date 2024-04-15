@@ -18,7 +18,7 @@ public class InventoryTests : DomainModelTestFixture
 
         await Then(async s =>
         {
-            Assert.True(true);       
+            Assert.That(true);       
         });
     }
 }

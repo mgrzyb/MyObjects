@@ -11,6 +11,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\MyObjects.NHibernate\MyObjects.NHibernate.csproj" />
       <ProjectReference Include="..\MyObjects\MyObjects.csproj" />
     </ItemGroup>
 

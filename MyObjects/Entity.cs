@@ -75,7 +75,7 @@ namespace MyObjects
             return this.GetType();
         }
         
-        public static bool operator ==(Entity left, object right)
+        public static bool operator ==(Entity? left, object? right)
         {
             return Equals(left, right);
         }

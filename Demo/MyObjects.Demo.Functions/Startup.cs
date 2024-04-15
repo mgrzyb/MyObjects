@@ -12,7 +12,6 @@ using MyObjects.Demo.Functions.GraphQL;
 using MyObjects.Demo.Functions.GraphQL.ProductCategories;
 using MyObjects.Demo.Functions.Infrastructure;
 using MyObjects.Demo.Functions.Model;
-using MyObjects.Demo.Model;
 using MyObjects.Demo.Model.Products;
 using MyObjects.Functions;
 using MyObjects.Identity;
@@ -54,7 +53,7 @@ public class Startup : FunctionsStartup
 
     private IContainer ConfigureContainer(ContainerBuilder builder)
     {
-        builder.AddMyObjects(typeof(Product).Assembly)
+        builder.AddMyObjects(typeof(Product).Assembly, typeof(UserIdentity).Assembly)
             .UseDurableTasks()
             .UseDomainEventBus()
             .UseNHibernate(new TestPersistenceStrategy())
@@ -97,9 +96,7 @@ public class Startup : FunctionsStartup
             .WithParameter(ResolvedParameter.ForNamed<IDurableQueue>("domain-events"))
             .AsImplementedInterfaces();
         
-        builder.RegisterType<AutoDomainEventMessageMapper<AggregateCreated<Product>>>().AsImplementedInterfaces();
-        
-        builder.RegisterType<UserStore>().AsImplementedInterfaces().AsSelf().As(typeof(UserStore<User>));
+        builder.RegisterType<AutoDomainEventMessageMapper<AggregateCreated<Product>>>().AsImplementedInterfaces();        
         return builder.Build();
     }
 

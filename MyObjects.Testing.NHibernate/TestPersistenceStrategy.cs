@@ -29,6 +29,8 @@ namespace MyObjects.Testing.NHibernate
 
         public void ApplyTo(Configuration cfg)
         {
+            global::NHibernate.Cfg.Environment.UseReflectionOptimizer = false;
+
             var sqliteConnectionString = new SqliteConnectionStringBuilder()
             {
                 DataSource = $"UT-{Guid.NewGuid().ToString()}.sqlite",

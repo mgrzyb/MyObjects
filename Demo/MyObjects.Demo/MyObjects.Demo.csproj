@@ -7,6 +7,10 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <PackageReference Include="OneOf" Version="3.0.263" />
+    </ItemGroup>
+
+    <ItemGroup>
       <ProjectReference Include="..\..\MyObjects.NHibernate\MyObjects.NHibernate.csproj" />
       <ProjectReference Include="..\..\MyObjects\MyObjects.csproj" />
         <ProjectReference Include="..\..\MyObjects.Identity\MyObjects.Identity.csproj" />

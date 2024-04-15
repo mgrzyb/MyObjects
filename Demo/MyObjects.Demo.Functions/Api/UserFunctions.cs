@@ -4,12 +4,12 @@ using System.Security.Claims;
 using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
-using MyObjects.Demo.Model;
+using MyObjects.Demo.Model.Identity;
+using MyObjects.Demo.Model.Identity.Commands;
 using MyObjects.Functions;
-using MyObjects.Identity.Commands;
+using MyObjects.Identity;
 
 namespace MyObjects.Demo.Functions.Api;
 
@@ -19,22 +19,48 @@ public partial class UserFunctions : HttpFunctionsBase
     {
     }
 
-    [HttpPost][Route("login")]
-    public async Task<OneOf<HttpOk<string>, HttpUnauthorized>> Login(LoginRequestDto body)
+    [HttpPost]
+    [Route("api/users")]
+    public async Task<OneOf<HttpOk<string>, HttpUnauthorized>> Register(UsernameAndPasswordCredentials body)
     {
-        var success = await this.Mediator.Send(new AuthenticateUser<User>(body.Username, body.Password));
-        if (success) {
-            var token = new JwtSecurityTokenHandler().CreateEncodedJwt(new SecurityTokenDescriptor {
-                Expires = DateTime.UtcNow.AddHours(1),
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(Encoding.UTF8.GetBytes("SXkSqsKyNUyvGbnHs7ke2NCq8zQzNLW7mPmHbnZZ")), SecurityAlgorithms.HmacSha256),
-                Subject = new ClaimsIdentity(new[] { new Claim(ClaimTypes.Name, body.Username) })
-            });
-            return HttpOk.WithValue(token);
-        }
-        else
-        {
+        var createUserResult = await this.Mediator.Send(new CreateUser(body));
+
+        return createUserResult.Match<OneOf<HttpOk<string>, HttpUnauthorized>>(
+            userRef =>
+            {
+                var user = this.Session.Resolve(userRef).Result;
+                var token = new JwtSecurityTokenHandler().CreateEncodedJwt(new SecurityTokenDescriptor
+                {
+                    Expires = DateTime.UtcNow.AddHours(1),
+                    SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(Encoding.UTF8.GetBytes("SXkSqsKyNUyvGbnHs7ke2NCq8zQzNLW7mPmHbnZZ")), SecurityAlgorithms.HmacSha256),
+                    Subject = new ClaimsIdentity(new[] { new Claim(ClaimTypes.Name, user.Identity.Username) })
+                });
+
+                return HttpOk.WithValue(token);
+            },
+            error =>
+            {
+                return new HttpUnauthorized();
+            }
+        );
+    }
+
+    [HttpPost][Route("login")]
+    public async Task<OneOf<HttpOk<string>, HttpUnauthorized>> Login(UsernameAndPasswordCredentials body)
+    {
+        var userRef = await this.Mediator.Send(new AuthenticateUser(body));
+        if (userRef == null)
             return new HttpUnauthorized();
-        }
+
+        var user = await this.Session.Resolve(userRef);
+
+        var token = new JwtSecurityTokenHandler().CreateEncodedJwt(new SecurityTokenDescriptor {
+            Expires = DateTime.UtcNow.AddHours(1),
+            SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(Encoding.UTF8.GetBytes("SXkSqsKyNUyvGbnHs7ke2NCq8zQzNLW7mPmHbnZZ")), SecurityAlgorithms.HmacSha256),
+            Subject = new ClaimsIdentity(new[] { new Claim(ClaimTypes.Name, user.Identity.Username) })
+        });
+
+        return HttpOk.WithValue(token);
     }
 
     [HttpGet][Route("auth-test")]
@@ -47,10 +73,4 @@ public partial class UserFunctions : HttpFunctionsBase
 
         return new HttpUnauthorized();
     }
-}
-
-public class LoginRequestDto
-{
-    public string Username { get; set; }
-    public string Password { get; set; }
 }
